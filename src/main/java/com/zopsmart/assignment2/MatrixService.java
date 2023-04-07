@@ -1,7 +1,7 @@
 package com.zopsmart.assignment2;
 
 public class MatrixService {
-    public int[][] addMatrix(int [][]A,int [][]B){
+    public int[][] addMatrix(int[][] A,int[][] B){
         int[][] res = new int[A.length][A[0].length];
 
         for (int i =0 ; i< A.length; i++){
@@ -61,10 +61,9 @@ public class MatrixService {
 
 
     public void printMatrix(int [][]A){
-        int [][] result = new int[A.length][A[0].length];
         for(int i=0;i< A.length;i++){
             for(int j=0;j<A[0].length;j++){
-               System.out.println(result[i][j] +" ");
+               System.out.println(A[i][j] +" ");
             }
             System.out.println();
         }
