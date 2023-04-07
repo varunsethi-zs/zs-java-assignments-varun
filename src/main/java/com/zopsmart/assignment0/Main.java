@@ -1,4 +1,4 @@
-package com.zopsmart;
+package com.zopsmart.assignment0;
 
 public class Main
 {
