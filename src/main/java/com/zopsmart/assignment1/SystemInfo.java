@@ -33,7 +33,7 @@ public class SystemInfo {
         String osbuild =System.getProperty("os.arch");
         System.out.println("OS Build : " +osbuild);
 
-        /** system.get Property function to os version */
+        /** system.get Property function to Os version */
         String osversion =System.getProperty("os.version");
         System.out.println("OS Version : " +osversion);
     }
