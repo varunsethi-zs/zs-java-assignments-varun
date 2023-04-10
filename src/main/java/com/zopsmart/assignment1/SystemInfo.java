@@ -2,6 +2,9 @@ package com.zopsmart.assignment1;
 
 import java.io.File;
 
+/**
+ * SystemInfo class for displaying the System information
+ */
 public class SystemInfo {
 
     public static void main(String[] args) {
@@ -21,8 +24,8 @@ public class SystemInfo {
         System.out.println("memory = " + memory + "gb");
 
         /** Runtime.getRuntime().availableProcessors function to get Cpu Cores */
-        int Cores = Runtime.getRuntime().availableProcessors();
-        System.out.println("System Cpu/Cores = " + Cores);
+        int cpuCores = Runtime.getRuntime().availableProcessors();
+        System.out.println("System Cpu/Cores = " + cpuCores);
 
         /** systemSpace.getTotalSpace function to get total disc space of system */
         long totalCapacity = systemSpace.getTotalSpace() / 1024 / 1024 / 1024;
