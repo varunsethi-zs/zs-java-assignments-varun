@@ -19,3 +19,4 @@ public class Soap extends PersonalCare {
         this.brand = brand;
     }
 }
+

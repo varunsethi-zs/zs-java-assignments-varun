@@ -14,4 +14,5 @@ public class PersonalCare extends Product {
         super(productId, productName, productDescription, productPrice);
         this.noReturn = noReturn;
     }
+
 }

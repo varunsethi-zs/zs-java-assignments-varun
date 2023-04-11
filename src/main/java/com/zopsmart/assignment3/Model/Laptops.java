@@ -18,4 +18,5 @@ public class Laptops extends Electronics {
         this.processor = processor;
     }
 
+
 }
