@@ -1,71 +1,106 @@
 package com.zopsmart.assignment2;
 
+/**
+ * MatrixService class for implementation of matrix operations
+ */
 public class MatrixService {
-    public int[][] addMatrix(int[][] A,int[][] B){
-        int[][] res = new int[A.length][A[0].length];
 
-        for (int i =0 ; i< A.length; i++){
-            for (int j = 0; j< A[0].length; j++){
-                res[i][j] = A[i][j] + B [i][j];
+    /**
+     * addMatrix function for addition of 2 matrices
+     */
+    public int[][] addMatrix(int[][] matrixM1, int[][] matrixM2) {
+        int[][] res = new int[matrixM1.length][matrixM1[0].length];
+
+        for (int i = 0; i < matrixM1.length; i++) {
+            for (int j = 0; j < matrixM1[0].length; j++) {
+                res[i][j] = matrixM1[i][j] + matrixM2[i][j];
             }
         }
         return res;
 
     }
-    public int[][] substractMatrix(int [][]A,int [][]B){
-        int[][] res = new int[A.length][A[0].length];
 
-        for (int i =0 ; i< A.length; i++){
-            for (int j = 0; j< A[0].length; j++){
-                res[i][j] = A[i][j] - B [i][j];
+    /**
+     * subtractMatrix function for subtraction of 2 matrices
+     */
+
+    public int[][] subtractMatrix(int[][] matrixM1, int[][] matrixM2) {
+        int[][] res = new int[matrixM1.length][matrixM1[0].length];
+
+        for (int i = 0; i < matrixM1.length; i++) {
+            for (int j = 0; j < matrixM1[0].length; j++) {
+                res[i][j] = matrixM1[i][j] - matrixM2[i][j];
             }
         }
         return res;
 
     }
-    public int[][] matrixMultiplication(int[][] A,int[][] B){
-        int[][] res = new int[A.length][A[0].length];
 
-        for(int i=0;i<A.length;i++) {
-            for (int j = 0; j < A[0].length; j++) {
+    /**
+     * matrixMultiplication function for multiplication of 2 matrices
+     */
+
+    public int[][] matrixMultiplication(int[][] matrixM1, int[][] matrixM2) {
+        int[][] res = new int[matrixM1.length][matrixM1[0].length];
+
+        for (int i = 0; i < matrixM1.length; i++) {
+            for (int j = 0; j < matrixM1[0].length; j++) {
                 res[i][j] = 0;
                 for (int k = 0; k < 3; k++) {
-                    res[i][j] += A[i][k] * B[k][j];
+                    res[i][j] += matrixM1[i][k] * matrixM2[k][j];
                 }
             }
         }
         return res;
     }
 
-    public int[][] scalarMultiplication(int[][] A, int k){
-        int[][] res = new int[A.length][A[0].length];
+    /**
+     * scalarMultiplication function for multiplication of a matrix with any scalar value
+     */
 
-        for (int i =0 ; i< A.length; i++){
-            for (int j = 0; j< A[0].length; j++){
-                res[i][j] = k * A[i][j];
+    public int[][] scalarMultiplication(int[][] matrixM1, int k) {
+        int[][] resultantMatrix = new int[matrixM1.length][matrixM1[0].length];
+
+        for (int i = 0; i < matrixM1.length; i++) {
+            for (int j = 0; j < matrixM1[0].length; j++) {
+                resultantMatrix[i][j] = k * matrixM1[i][j];
             }
         }
-        return res;
+        return resultantMatrix;
     }
 
-    public int[][] matrixTranspose(int[][] A){
-        int[][] transpose = new int[A.length][A[0].length];
+    /**
+     * matrixTranspose function for transpose of a matrix
+     */
 
-        for(int i=0;i< A.length;i++){
-            for(int j=0;j<A[0].length;j++){
-                transpose[i][j]=A[j][i];
+    public int[][] matrixTranspose(int[][] matrixM1) {
+        int[][] transpose = new int[matrixM1.length][matrixM1[0].length];
+
+        for (int i = 0; i < matrixM1.length; i++) {
+            for (int j = 0; j < matrixM1[0].length; j++) {
+                transpose[i][j] = matrixM1[j][i];
             }
         }
         return transpose;
     }
 
+    /**
+     * printMatrix function to display the resultant matrix
+     */
 
-    public void printMatrix(int [][]A){
-        for(int i=0;i< A.length;i++){
-            for(int j=0;j<A[0].length;j++){
-               System.out.println(A[i][j] +" ");
+    public static void printMatrix(int[][] resultantMatrix) {
+
+        for (int i = 0; i < resultantMatrix.length; i++) {
+
+            for (int j = 0; j < resultantMatrix[0].length; j++) {
+
+                System.out.print(resultantMatrix[i][j] + " ");
+
             }
+
             System.out.println();
+
         }
+
     }
 }
