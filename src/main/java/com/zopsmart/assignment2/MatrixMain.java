@@ -3,7 +3,7 @@ package com.zopsmart.assignment2;
 import java.util.Scanner;
 
 /**
- * MatrixMain class for implementing matrix operations
+ * MatrixMain class for Calling Controller and Matrices operations function
  */
 public class MatrixMain {
 
