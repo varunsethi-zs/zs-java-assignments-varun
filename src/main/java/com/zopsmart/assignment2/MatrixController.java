@@ -3,14 +3,14 @@ package com.zopsmart.assignment2;
 import java.util.*;
 
 /**
- * MatrixController class for taking MatrixInput from user
+ * MatrixController class for taking matrixInput from user
  */
 public class MatrixController {
 
     /**
-     * MatrixInput function for taking input for a matrix
+     * matrixInput function for taking input for a matrix
      */
-    public int[][] MatrixInput() {
+    public int[][] matrixInput() {
         Scanner scn = new Scanner(System.in);
         System.out.println("Enter number of rows ");
         int rows = scn.nextInt();
@@ -28,9 +28,9 @@ public class MatrixController {
     }
 
     /**
-     * MatricesOperations function to select matrix operation to be performed
+     * matricesOperations function to select matrix operation to be performed
      */
-    public void MatricesOperations() {
+    public void matricesOperations() {
         Scanner scn = new Scanner(System.in);
         MatrixService matrixService = new MatrixService();
 
@@ -46,38 +46,43 @@ public class MatrixController {
             choice = scn.nextInt();
             switch (choice) {
                 case 1 -> {
-                    int[][] matrixM1 = MatrixInput();
-                    int[][] matrixM2 = MatrixInput();
+                    int[][] matrixM1 = matrixInput();
+                    int[][] matrixM2 = matrixInput();
                     int[][] resultantMatrix = matrixService.addMatrix(matrixM1, matrixM2);
                     matrixService.printMatrix(resultantMatrix);
 
                 }
                 case 2 -> {
-                    int[][] matrixM1 = MatrixInput();
-                    int[][] matrixM2 = MatrixInput();
+                    int[][] matrixM1 = matrixInput();
+                    int[][] matrixM2 = matrixInput();
                     int[][] resultantMatrix = matrixService.subtractMatrix(matrixM1, matrixM2);
                     matrixService.printMatrix(resultantMatrix);
                 }
                 case 3 -> {
-                    int[][] matrixM1 = MatrixInput();
-                    int[][] matrixM2 = MatrixInput();
+                    int[][] matrixM1 = matrixInput();
+                    int[][] matrixM2 = matrixInput();
                     int[][] resultantMatrix = matrixService.matrixMultiplication(matrixM1, matrixM2);
                     matrixService.printMatrix(resultantMatrix);
                 }
                 case 4 -> {
-                    int[][] matrixM1 = MatrixInput();
+                    int[][] matrixM1 = matrixInput();
                     System.out.println("Enter Scalar Multiplier: ");
                     int k = scn.nextInt();
                     int[][] resultantMatrix = matrixService.scalarMultiplication(matrixM1, k);
                     matrixService.printMatrix(resultantMatrix);
                 }
                 case 5 -> {
-                    int[][] matrixM1 = MatrixInput();
+                    int[][] matrixM1 = matrixInput();
                     int[][] resultantMatrix = matrixService.matrixTranspose(matrixM1);
                     matrixService.printMatrix(resultantMatrix);
+                }
+                default -> {
+                    System.out.println("Invalid Option");
+                    return;
                 }
 
             }
         } while (choice != 6);
     }
 }
+
