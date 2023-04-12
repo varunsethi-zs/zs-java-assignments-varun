@@ -25,6 +25,3 @@ public class Soap extends PersonalCare {
         System.out.println("brand " + brand);
     }
 }
-
-
-

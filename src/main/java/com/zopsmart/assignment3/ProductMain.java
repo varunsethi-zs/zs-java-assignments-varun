@@ -11,5 +11,3 @@ public class ProductMain {
         productController.productInput();
     }
 }
-
-

@@ -26,5 +26,3 @@ public class FreshGrocery extends Grocery {
         System.out.println("expiryDate " + expiryDate);
     }
 }
-
-

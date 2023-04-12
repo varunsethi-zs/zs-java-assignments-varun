@@ -24,5 +24,3 @@ public class Electronics extends Product {
         System.out.println("Category " + category);
     }
 }
-
-

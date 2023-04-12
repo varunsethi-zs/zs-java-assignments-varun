@@ -20,4 +20,3 @@ public class PersonalCare extends Product {
         super.displayProducts();
     }
 }
-

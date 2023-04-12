@@ -24,5 +24,3 @@ public class Laptops extends Electronics {
         System.out.println("Processor " + processor);
     }
 }
-
-
