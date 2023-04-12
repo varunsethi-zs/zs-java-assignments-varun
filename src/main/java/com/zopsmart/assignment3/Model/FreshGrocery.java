@@ -18,4 +18,12 @@ public class FreshGrocery extends Grocery {
         this.expiryDate = expiryDate;
         this.name = name;
     }
+
+    @Override
+    public void displayProducts() {
+        super.displayProducts();
+        System.out.println("Name " + name);
+        System.out.println("expiryDate " + expiryDate);
+    }
 }
+

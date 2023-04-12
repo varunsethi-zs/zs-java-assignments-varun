@@ -8,7 +8,6 @@ public class Laptops extends Electronics {
     public String screenSize;
     public String processor;
 
-
     /**
      * Laptops Parameterized Constructor
      */
@@ -18,5 +17,11 @@ public class Laptops extends Electronics {
         this.processor = processor;
     }
 
-
+    @Override
+    public void displayProducts() {
+        super.displayProducts();
+        System.out.println("ScreenSize " + screenSize);
+        System.out.println("Processor " + processor);
+    }
 }
+

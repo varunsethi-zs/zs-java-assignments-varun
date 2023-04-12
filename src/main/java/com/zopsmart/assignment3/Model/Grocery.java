@@ -18,5 +18,10 @@ public class Grocery extends Product {
         this.category = category;
     }
 
-
+    @Override
+    public void displayProducts() {
+        super.displayProducts();
+        System.out.println("Brand " + brand);
+        System.out.println("Category " + category);
+    }
 }

@@ -12,33 +12,9 @@ public class ProductService {
 
     public static HashMap<Integer, Product> map = new HashMap<>();
 
-    /**
-     * addElectronic function for adding electronic Product
-     */
-
-    public void addElectronic(int productID, Product p) {
+    public void addProduct(int productID, Product p) {
         map.put(productID, p);
     }
-
-    /**
-     * addGrocery function for adding Grocery Product
-     */
-
-    public void addGrocery(int productID, Product p) {
-        map.put(productID, p);
-    }
-
-    /**
-     * addPersonalCare function for adding PersonalCare Product
-     */
-    public void addPersonalCare(int productID, Product p) {
-        map.put(productID, p);
-    }
-
-
-    /**
-     * findElectronic function for getting electronic Product by id
-     */
 
     public void findElectronic(int productID) {
         if (!map.containsKey(productID)) {
@@ -95,9 +71,11 @@ public class ProductService {
      * DeleteProduct function for deleting Product by id
      */
     public void deleteProduct(int productId) {
-        if (this.map.containsKey(productId)) {
-            this.map.remove(productId);
 
+        if (!map.containsKey(productId)) {
+            System.out.println("product does not exists");
+        } else {
+            this.map.remove(productId);
             System.out.println("product with product id " + productId + "deleted");
         }
     }
@@ -108,11 +86,10 @@ public class ProductService {
      */
     public void getALL() {
         for (int id : map.keySet()) {
-            Product val = map.get(id);
-            System.out.println("Product ID = " + val.productId);
-            System.out.println("Product name = " + val.productName);
-            System.out.println("Product price = " + val.productPrice);
+            Product product = map.get(id);
+            product.displayProducts();
         }
     }
 }
+
 

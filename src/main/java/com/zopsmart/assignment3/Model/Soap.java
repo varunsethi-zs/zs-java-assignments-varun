@@ -9,7 +9,6 @@ public class Soap extends PersonalCare {
     public String flavour;
     public String brand;
 
-
     /**
      * Soap Parameterized Constructor
      */
@@ -18,5 +17,13 @@ public class Soap extends PersonalCare {
         this.flavour = flavour;
         this.brand = brand;
     }
+
+    @Override
+    public void displayProducts() {
+        super.displayProducts();
+        System.out.println("flavour" + flavour);
+        System.out.println("brand " + brand);
+    }
 }
+
 

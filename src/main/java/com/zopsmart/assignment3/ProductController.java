@@ -10,7 +10,10 @@ import java.util.Scanner;
  */
 public class ProductController {
 
-    public void ProductInput() {
+    /**
+     * productInput function to take Product Input and inputs choice for CRUD operations
+     */
+    public void productInput() {
 
         ProductService service = new ProductService();
         Scanner scn = new Scanner(System.in);
@@ -69,7 +72,7 @@ public class ProductController {
                                 String processor = scn.next();
 
                                 Product p1 = new Laptops(productID, productName, description, price, brand, category, screenSize, processor);
-                                service.addElectronic(productID, p1);
+                                service.addProduct(productID, p1);
                                 break;
 
                             case 2:
@@ -98,7 +101,7 @@ public class ProductController {
                                 String expiryDate = scn.next();
 
                                 Product p2 = new FreshGrocery(productID, productName, description, price, brand, category, expiryDate, name);
-                                service.addGrocery(productID, p2);
+                                service.addProduct(productID, p2);
                                 break;
 
                             case 3:
@@ -127,9 +130,11 @@ public class ProductController {
                                 String flavour = scn.next();
 
                                 Product p3 = new Soap(productID, productName, description, price, returnable, flavour, brand);
-                                service.addPersonalCare(productID, p3);
+                                service.addProduct(productID, p3);
                                 break;
-
+                            default:
+                                System.out.println("Invalid Choice");
+                                break;
                         }
                     } while (choice != 4);
                     break;
@@ -160,7 +165,9 @@ public class ProductController {
                                 productID = scn.nextInt();
                                 service.findPersonalCare(productID);
                                 break;
-
+                            default: {
+                                System.out.println("invalid choice");
+                            }
 
                         }
                     } while (choice != 4);
@@ -174,9 +181,14 @@ public class ProductController {
                 case 4:
                     service.getALL();
                     break;
+                default:{
+                    System.out.println("Invalid Choice");
+                    break;
+                }
             }
         } while (option != 5);
 
     }
 }
+
 

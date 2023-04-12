@@ -9,7 +9,6 @@ public class Product {
     public String productDescription;
     public double productPrice;
 
-
     /**
      * Product Parameterized Constructor
      */
@@ -20,4 +19,11 @@ public class Product {
         this.productDescription = productDescription;
         this.productPrice = productPrice;
     }
+
+    public void displayProducts() {
+        System.out.println("productId " + productId);
+        System.out.println("productName " + productName);
+        System.out.println("productPrice " + productPrice);
+    }
 }
+

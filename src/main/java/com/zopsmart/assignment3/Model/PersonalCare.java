@@ -15,4 +15,8 @@ public class PersonalCare extends Product {
         this.noReturn = noReturn;
     }
 
+    @Override
+    public void displayProducts() {
+        super.displayProducts();
+    }
 }
