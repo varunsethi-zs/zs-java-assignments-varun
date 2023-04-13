@@ -26,10 +26,11 @@ public class ProductController {
         do {
             System.out.println("\nChoose from the below: ");
             System.out.println("1. Add a product");
-            System.out.println("2. Find a product");
+            System.out.println("2. Get product by Id");
             System.out.println("3. Delete product");
             System.out.println("4. Get ALL");
-            System.out.println("5.exit ");
+            System.out.println("5. update Product");
+            System.out.println("6.exit ");
             System.out.print("Enter your choice: ");
             option = scn.nextInt();
 
@@ -129,7 +130,7 @@ public class ProductController {
                                 System.out.println("Enter flavour of the soap: ");
                                 String flavour = scn.next();
 
-                                Product p3 = new Soap(productID, productName, description, price, returnable, flavour, brand);
+                                Product p3 = new Soap(productID, productName, description, price, flavour, brand);
                                 service.addProduct(productID, p3);
                                 break;
                             default:
@@ -151,19 +152,19 @@ public class ProductController {
                             case 1:
                                 System.out.println("Enter productID: ");
                                 productID = scn.nextInt();
-                                service.findElectronic(productID);
+                                service.getById(productID);
                                 break;
 
                             case 2:
-                                System.out.println("Enter productID: ");
+                                System.out.println("Enter productId: ");
                                 productID = scn.nextInt();
-                                service.findGrocery(productID);
+                                service.getById(productID);
                                 break;
 
                             case 3:
-                                System.out.println("Enter productID: ");
+                                System.out.println("Enter ProductID: ");
                                 productID = scn.nextInt();
-                                service.findPersonalCare(productID);
+                                service.getById(productID);
                                 break;
                             default: {
                                 System.out.println("invalid choice");
@@ -179,14 +180,109 @@ public class ProductController {
                     service.deleteProduct(productID);
                     break;
                 case 4:
+                    System.out.println("\n");
                     service.getALL();
                     break;
-                default:{
+                case 5:
+                    do {
+                        System.out.println("\nChoose from the below: ");
+                        System.out.println("1. Update an Electronic item");
+                        System.out.println("2. Update a Grocery item");
+                        System.out.println("3. Update a PersonalCare item");
+                        System.out.println("4. Exit");
+                        choice = scn.nextInt();
+
+                        switch (choice) {
+                            case 1:
+                                System.out.println("Enter productID: ");
+                                productID = scn.nextInt();
+
+                                System.out.println("Enter Product Name: ");
+                                productName = scn.next();
+
+                                System.out.println("Enter Product Description: ");
+                                description = scn.next();
+
+                                System.out.println("Enter price: ");
+                                price = scn.nextDouble();
+
+                                System.out.println("Enter Brand Name: ");
+                                String brand = scn.next();
+
+                                System.out.println("Enter Product Category: ");
+                                String category = scn.next();
+
+                                System.out.println("Enter screenSize of laptop: ");
+                                String screenSize = scn.next();
+
+                                System.out.println("Enter processor: ");
+                                String processor = scn.next();
+
+                                Product p1 = new Laptops(productID, productName, description, price, brand, category, screenSize, processor);
+                                service.updateProduct(productID, p1);
+                                break;
+
+                            case 2:
+                                System.out.println("Enter productID: ");
+                                productID = scn.nextInt();
+
+                                System.out.println("Enter Product Name: ");
+                                productName = scn.next();
+
+                                System.out.println("Enter Product Description: ");
+                                description = scn.next();
+
+                                System.out.println("Enter price: ");
+                                price = scn.nextDouble();
+
+                                System.out.println("Enter Brand Name: ");
+                                brand = scn.next();
+
+                                System.out.println("Enter Product Category: ");
+                                category = scn.next();
+
+                                System.out.println("Enter name of the Fresh Grocery: ");
+                                String name = scn.next();
+
+                                System.out.println("Enter expiry Date of Fresh Grocery: ");
+                                String expiryDate = scn.next();
+
+                                Product p2 = new FreshGrocery(productID, productName, description, price, brand, category, expiryDate, name);
+                                service.updateProduct(productID, p2);
+                                break;
+
+                            case 3:
+                                System.out.println("Enter productID: ");
+                                productID = scn.nextInt();
+
+                                System.out.println("Enter Product Name: ");
+                                productName = scn.next();
+
+                                System.out.println("Enter Product Description: ");
+                                description = scn.next();
+
+                                System.out.println("Enter price: ");
+                                price = scn.nextDouble();
+
+                                System.out.println("Enter Brand Name: ");
+                                brand = scn.next();
+
+                                System.out.println("Enter flavour of the soap: ");
+                                String flavour = scn.next();
+
+                                Product p3 = new Soap(productID, productName, description, price, flavour, brand);
+                                service.updateProduct(productID, p3);
+                                break;
+                            default:
+                                System.out.println("Invalid Choice");
+                                break;
+                        }
+                    } while (choice != 4);
+
+                default:
                     System.out.println("Invalid Choice");
                     break;
-                }
             }
-        } while (option != 5);
-
+        } while (option != 6);
     }
 }

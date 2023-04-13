@@ -8,6 +8,7 @@ public class Product {
     public String productName;
     public String productDescription;
     public double productPrice;
+    public boolean isReturnable;
 
     /**
      * Product Parameterized Constructor

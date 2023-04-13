@@ -12,59 +12,12 @@ public class ProductService {
 
     public static HashMap<Integer, Product> map = new HashMap<>();
 
+    /**
+     * addProduct function to add a new Product
+     */
+
     public void addProduct(int productID, Product p) {
         map.put(productID, p);
-    }
-
-    public void findElectronic(int productID) {
-        if (!map.containsKey(productID)) {
-            System.out.println("product does not exists");
-        } else {
-            Laptops laptops = (Laptops) map.get(productID);
-
-            System.out.println("Product ID: " + laptops.productId);
-            System.out.println("Product price: " + laptops.productPrice);
-            System.out.println("Product brand: " + laptops.brand);
-            System.out.println("Laptop's screen size: " + laptops.screenSize);
-            System.out.println("Laptop's processor is : " + laptops.processor);
-        }
-    }
-
-    /**
-     * findGrocery for getting Grocery Product by id
-     */
-    public void findGrocery(int productID) {
-        if (!map.containsKey(productID)) {
-            System.out.println("product does not exists");
-        } else {
-            FreshGrocery freshGrocery = (FreshGrocery) map.get(productID);
-
-            System.out.println("Product ID: " + freshGrocery.productId);
-            System.out.println("Product price: " + freshGrocery.productPrice);
-            System.out.println("Grocery brand: " + freshGrocery.brand);
-            System.out.println("Grocery Category: " + freshGrocery.category);
-            System.out.println("Grocery name: " + freshGrocery.name);
-            System.out.println("Grocery expiry Date: " + freshGrocery.expiryDate);
-
-        }
-    }
-
-    /**
-     * findEPersonalCare function for getting PersonalCare Product by id
-     */
-
-    public void findPersonalCare(int productID) {
-        if (!map.containsKey(productID)) {
-            System.out.println("product does not exists");
-        } else {
-
-            Soap soap = (Soap) map.get(productID);
-
-            System.out.println("Product ID: " + soap.productId);
-            System.out.println("Product price: " + soap.productPrice);
-            System.out.println("Company of the soap: " + soap.brand);
-            System.out.println("Flavour of the soap: " + soap.flavour);
-        }
     }
 
     /**
@@ -88,6 +41,33 @@ public class ProductService {
         for (int id : map.keySet()) {
             Product product = map.get(id);
             product.displayProducts();
+            System.out.println("\n");
+        }
+    }
+
+
+    /**
+     * getById function to get Product through ProductId
+     */
+    public void getById(int productID) {
+        if (!map.containsKey(productID)) {
+            System.out.println("product does not exists");
+        } else {
+            Product product = map.get(productID);
+            product.displayProducts();
+            System.out.println("\n");
+        }
+    }
+
+
+    /**
+     * updateProduct function to update a Product product
+     */
+    public void updateProduct(int productID, Product product) {
+        if (!map.containsKey(productID)) {
+            System.out.println("product does not exists");
+        } else {
+            map.replace(productID, product);
         }
     }
 }

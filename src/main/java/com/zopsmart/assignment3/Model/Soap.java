@@ -12,8 +12,8 @@ public class Soap extends PersonalCare {
     /**
      * Soap Parameterized Constructor
      */
-    public Soap(int productId, String productName, String productDescription, double productPrice, boolean noReturn, String flavour, String brand) {
-        super(productId, productName, productDescription, productPrice, noReturn);
+    public Soap(int productId, String productName, String productDescription, double productPrice, String flavour, String brand) {
+        super(productId, productName, productDescription, productPrice);
         this.flavour = flavour;
         this.brand = brand;
     }
