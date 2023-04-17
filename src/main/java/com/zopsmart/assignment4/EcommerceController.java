@@ -21,7 +21,7 @@ public class EcommerceController {
 
         do {
             System.out.println("\nChoose from the below: ");
-            System.out.println("1. Add Category");
+            System.out.println("1. Add and Display The category");
             System.out.println("2. To get category");
             System.out.println("3. exit ");
             System.out.print(" Enter your choice: ");
