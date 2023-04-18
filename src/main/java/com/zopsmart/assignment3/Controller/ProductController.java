@@ -1,6 +1,7 @@
-package com.zopsmart.assignment3;
+package com.zopsmart.assignment3.Controller;
 
 import com.zopsmart.assignment3.Model.*;
+import com.zopsmart.assignment3.Service.ProductService;
 
 import java.util.Scanner;
 
