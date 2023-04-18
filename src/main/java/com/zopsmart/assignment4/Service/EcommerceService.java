@@ -1,4 +1,4 @@
-package com.zopsmart.assignment4;
+package com.zopsmart.assignment4.Service;
 
 import com.zopsmart.assignment4.Model.Category;
 import com.zopsmart.assignment4.Model.LruCache;
