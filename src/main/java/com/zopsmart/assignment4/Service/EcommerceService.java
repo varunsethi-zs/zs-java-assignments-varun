@@ -7,12 +7,12 @@ import com.zopsmart.assignment4.Model.LruCache;
  * EcommerceService Class for implementation of Display, Add and Get functions
  */
 public class EcommerceService {
-
+    LruCache lruCache = new LruCache(6);
 
     /**
      * getCategory Function to get the Category from memory
      */
-    public void getCategory(String categoryName, LruCache lruCache, Category category) {
+    public void getCategory(String categoryName, Category category) {
         if (!lruCache.cache.containsKey(categoryName)) {
 
             if (!category.getName().contains(categoryName)) {
@@ -23,9 +23,9 @@ public class EcommerceService {
 
         } else {
 
-            Category category1 = lruCache.cache.get(categoryName);
+            Category categories = lruCache.cache.get(categoryName);
             lruCache.cache.remove(categoryName);
-            lruCache.cache.put(categoryName, category1);
+            lruCache.cache.put(categoryName, categories);
             System.out.println("Category exists");
         }
     }
@@ -35,7 +35,7 @@ public class EcommerceService {
      */
     public void addCategory(Category category, Category child) {
 
-        category.children.add(child);
+        category.subCategory.add(child);
     }
 
     /**
@@ -47,7 +47,7 @@ public class EcommerceService {
             System.out.print("  ");
         }
         System.out.println("- " + category.getName());
-        for (Category child : category.getChildren()) {
+        for (Category child : category.getSubCategory()) {
             displayHierarchy(child, level + 1);
         }
     }
@@ -59,7 +59,7 @@ public class EcommerceService {
         if (category.getName().equals(name)) {
             return category;
         }
-        for (Category child : category.getChildren()) {
+        for (Category child : category.getSubCategory()) {
             Category result = findCategory(child, name);
             if (result != null) {
                 return result;

@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class LruCache {
 
-    public int size;
+public static int size;
     public LinkedHashMap<String, Category> cache;
 
     /**
@@ -15,7 +15,7 @@ public class LruCache {
      */
 
     public LruCache(int capacity) {
-        this.size = capacity;
+        size = capacity;
         this.cache = new LinkedHashMap<String, Category>(capacity);
     }
 }

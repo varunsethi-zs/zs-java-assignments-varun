@@ -6,19 +6,19 @@ import java.util.List;
 /** Category class for implementing category structure*/
 public class Category {
     public String name;
-    public List<Category> children;
+    public List<Category> subCategory;
 
     public Category(String name) {
         this.name = name;
-        children = new ArrayList<>();
+        subCategory = new ArrayList<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public List<Category> getChildren() {
-        return children;
+    public List<Category> getSubCategory() {
+        return subCategory;
     }
 
 }

@@ -17,7 +17,6 @@ public class EcommerceController {
     public void inputCategory() {
         EcommerceService ecommerceService = new EcommerceService();
         Scanner scn = new Scanner(System.in);
-        LruCache lruCache = new LruCache(6);
         int option;
 
         do {
@@ -64,7 +63,7 @@ public class EcommerceController {
                     System.out.print("Enter the name of a category to find");
                     String categoryName = scn.next();
                     Category category = new Category(categoryName);
-                    ecommerceService.getCategory(categoryName, lruCache, category);
+                    ecommerceService.getCategory(categoryName, category);
                     break;
 
                 default:
