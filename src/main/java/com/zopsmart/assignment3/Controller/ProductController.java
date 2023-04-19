@@ -15,7 +15,9 @@ public class ProductController {
      * addProduct function to take user input to add particular product
      */
 
-    public void addProduct(Scanner scn, ProductService service) {
+     ProductService service=new ProductService();
+
+    public void addProduct(Scanner scn) {
         String choice;
         System.out.println("Enter productID: ");
         int productID = scn.nextInt();
@@ -94,7 +96,7 @@ public class ProductController {
     /**
      * updateProduct function to take user input to update particular product
      */
-    public void updateProduct(Scanner scn, ProductService service) {
+    public void updateProduct(Scanner scn) {
         String choice;
         System.out.println("Enter productID: ");
         int productID = scn.nextInt();
@@ -174,7 +176,6 @@ public class ProductController {
      */
     public void productInput() {
 
-        ProductService service = new ProductService();
         Scanner scn = new Scanner(System.in);
         int productID;
         int option;
@@ -192,7 +193,7 @@ public class ProductController {
 
             switch (option) {
                 case 1:
-                    addProduct(scn, service);
+                    addProduct(scn);
                     break;
                 case 2:
                     int choice;
@@ -240,7 +241,7 @@ public class ProductController {
                     service.getALL();
                     break;
                 case 5:
-                    updateProduct(scn, service);
+                    updateProduct(scn);
                     break;
                 case 6:
                     break;
