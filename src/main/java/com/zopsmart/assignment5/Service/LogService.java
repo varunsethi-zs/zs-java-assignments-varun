@@ -5,6 +5,7 @@ import com.zopsmart.assignment5.Models.GitLogParsingException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.SQLOutput;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -16,7 +17,8 @@ import java.util.*;
  */
 public class LogService {
     Map<String, Map<Date, Integer>> commitCounts = new HashMap<>();
-
+    List<Commit> commits = new ArrayList<>();
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * parseGitLog function For Implementation Of Reading and Parsing file
@@ -24,7 +26,6 @@ public class LogService {
     public List<Commit> parseGitLog(String pathname, Date sinceDate) throws GitLogParsingException, FileNotFoundException, ParseException {
         Map<String, Map<Date, Integer>> commitCounts = new HashMap<>();
         File file = new File("src/main/java/com/zopsmart/assignment5/resources/log.txt");
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         HashMap<String, String> monthNumber = new HashMap<>();
         monthNumber.put("Jan", "01");
         monthNumber.put("Feb", "02");
@@ -46,7 +47,6 @@ public class LogService {
         Scanner scanner = new Scanner(file);
         scanner.useDelimiter("commit ");
 
-        List<Commit> commits = new ArrayList<>();
 
         while (scanner.hasNext()) {
             String commitText = scanner.next();
