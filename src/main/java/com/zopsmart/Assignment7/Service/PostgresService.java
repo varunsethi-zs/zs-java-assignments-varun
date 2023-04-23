@@ -28,7 +28,11 @@ public class PostgresService {
         createStatement.executeUpdate(query);
         query = "CREATE TABLE departments (id INT PRIMARY KEY, name VARCHAR(50))";
         createStatement.executeUpdate(query);
-        query = "CREATE TABLE student_department (student_id INT, department_id INT)";
+        query = "CREATE TABLE Student_Department" + " ("
+                + "student_id INTEGER REFERENCES students" + "(id),"
+                + "department_id INTEGER REFERENCES departments" + "(id),"
+                + "PRIMARY KEY(student_id, department_id)"
+                + ")";
         createStatement.executeUpdate(query);
         Logger.getLogger("Table Created Successfully");
         connection.close();

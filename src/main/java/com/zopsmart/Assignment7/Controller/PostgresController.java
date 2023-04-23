@@ -20,32 +20,36 @@ public class PostgresController {
     public void useDatabase() throws SQLException {
         Scanner scanner = new Scanner(System.in);
         PostgresService postgresService = new PostgresService();
+        int choice;
+
+       do{
         logger.info("\n Choose from below options");
         logger.info("1. Enter 1 to create Tables");
         logger.info("2. Enter 2 to enter records in Tables");
         logger.info("3. Enter 3 to extract data in output.txt file ");
         logger.info("4. Enter 4 to compress output.txt file");
         logger.info("5. Enter 5 for Query Explanation");
-        logger.info("6. Enter 5 to exit");
+        logger.info("6. Enter 6 to exit");
+        logger.info("Enter Choice");
 
-        int choice;
         choice = scanner.nextInt();
-        switch (choice) {
-            case 1:
-                postgresService.createTable();
-            case 2:
-                postgresService.createRecords();
-            case 3:
-                postgresService.extractDataInFile();
-            case 4:
-                postgresService.fileCompression();
-            case 5:
-                postgresService.explainQuery();
-            case 6:
-                break;
-            default:
-                logger.info("Invalid Choice");
-        }
-
+            switch (choice) {
+                case 1:
+                    postgresService.createTable();
+                case 2:
+                    postgresService.createRecords();
+                case 3:
+                    postgresService.extractDataInFile();
+                case 4:
+                    postgresService.fileCompression();
+                case 5:
+                    postgresService.explainQuery();
+                case 6:
+                    break;
+                default:
+                    logger.info("Invalid Choice");
+                    break;
+            }
+        } while (choice != 6);
     }
 }
