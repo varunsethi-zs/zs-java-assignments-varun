@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 public class LogController {
 
     private static final Logger logger = Logger.getLogger(LogController.class.getName());
+
     /**
      * logInputs Function For Taking User Input
      */
@@ -35,11 +36,12 @@ public class LogController {
             } catch (GitLogParsingException e) {
                 System.out.println("Invalid Git log file format: " + e.getMessage());
             }
-     logger.info(String.valueOf(logService.countCommitsByAuthor(sinceDate)));
-          logger.info(String.valueOf(logService.countCommitsByAuthorAndDate(sinceDate)));
-          logger.info(String.valueOf(logService.countDevelopers(sinceDateString)));
+            logger.info(String.valueOf(logService.countCommitsByAuthor(sinceDate)));
+            logger.info(String.valueOf(logService.countCommitsByAuthorAndDate(sinceDate)));
+            logger.info(String.valueOf(logService.countDevelopers(sinceDateString)));
         } catch (ParseException parseException) {
             Logger.getLogger(parseException.getMessage());
         }
     }
+
 }

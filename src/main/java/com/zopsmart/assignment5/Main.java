@@ -11,7 +11,7 @@ import java.text.ParseException;
 public class Main {
 
     /**
-     * main function Calling Controller And its Functions
+     * main function for Calling Controller And its Functions
      */
     public static void main(String[] args) throws ParseException {
         LogController logController = new LogController();

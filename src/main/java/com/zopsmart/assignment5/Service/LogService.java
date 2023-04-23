@@ -163,7 +163,6 @@ public class LogService {
                         developers.add(mapElement.getKey());
                     }
                 }
-
             }
             System.out.println("List of developers who did not commit anything successively in 2 days");
             return developers;
