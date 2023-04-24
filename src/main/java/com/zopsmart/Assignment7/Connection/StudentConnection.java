@@ -23,7 +23,6 @@ public class StudentConnection {
         Connection con = DriverManager.getConnection(
                 url, username, password);
 
-        con.close();
         return con;
     }
 
