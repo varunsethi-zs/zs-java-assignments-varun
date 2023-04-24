@@ -1,6 +1,6 @@
 package com.zopsmart.Assignment7.Service;
 
-import com.zopsmart.Assignment7.Connection.PostgresConnection;
+import com.zopsmart.Assignment7.Connection.StudentConnection;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,21 +13,23 @@ import java.util.zip.GZIPOutputStream;
  * PostgresService to implement Operations in Db
  */
 
-public class PostgresService {
-    PostgresConnection postgresConnection = new PostgresConnection();
+public class StudentService {
+    StudentConnection studentConnection = new StudentConnection();
 
 
     /**
      * createTable function to create the respective tables
      */
     public void createTable() throws SQLException {
-        Connection connection = postgresConnection.connection();
+        Connection connection = studentConnection.connection();
         Statement createStatement = connection.createStatement();
-
+        Logger.getLogger("In table creation");
         String query = "CREATE TABLE students (id SERIAL PRIMARY KEY, first_name VARCHAR(50), last_name VARCHAR(50), mobile VARCHAR(15))";
         createStatement.executeUpdate(query);
-        query = "CREATE TABLE departments (id INT PRIMARY KEY, name VARCHAR(50))";
+        Logger.getLogger("Student Table Created Successfully");
+        query = "CREATE TABLE departments (id SERIAL PRIMARY KEY, name VARCHAR(50))";
         createStatement.executeUpdate(query);
+        Logger.getLogger("Departments Table Created Successfully");
         query = "CREATE TABLE Student_Department" + " ("
                 + "student_id INTEGER REFERENCES students" + "(id),"
                 + "department_id INTEGER REFERENCES departments" + "(id),"
@@ -35,14 +37,13 @@ public class PostgresService {
                 + ")";
         createStatement.executeUpdate(query);
         Logger.getLogger("Table Created Successfully");
-        connection.close();
     }
 
     /**
      * createRecords function to enter records in tables
      */
     public void createRecords() throws SQLException {
-        Connection connection = postgresConnection.connection();
+        Connection connection = studentConnection.connection();
         Statement enterEntries = connection.createStatement();
         for (int i = 1; i <= 1000000; i++) {
             int department_id = (int) (Math.random() * 3) + 1;
@@ -57,7 +58,6 @@ public class PostgresService {
             insert = "INSERT INTO student_department (student_id, department_id) VALUES (" + i + ", " + department_id + ")";
             enterEntries.executeUpdate(insert);
         }
-        connection.close();
     }
 
     /**
@@ -65,7 +65,7 @@ public class PostgresService {
      */
 
     public void extractDataInFile() throws SQLException {
-        Connection connection = postgresConnection.connection();
+        Connection connection = studentConnection.connection();
         try {
             Statement statement = connection.createStatement();
             String select = "SELECT s.id, s.first_name, s.last_name, s.mobile, d.name AS department FROM students s JOIN student_department sd ON s.id = sd.student_id JOIN departments d ON sd.department_id = d.id";
@@ -108,7 +108,7 @@ public class PostgresService {
      * explainQuery function to explain the respective Query
      */
     public void explainQuery() throws SQLException {
-        Connection connection = postgresConnection.connection();
+        Connection connection = studentConnection.connection();
         Statement explainStatement = connection.createStatement();
         String sql = "EXPLAIN SELECT s.id, s.first_name, s.last_name, s.mobile, d.name AS department FROM students s JOIN student_department sd ON s.id = sd.student_id JOIN departments d ON sd.department_id = d.id";
 
@@ -117,6 +117,5 @@ public class PostgresService {
             System.out.println(resultSet.getString("id") + " " + resultSet.getString("select_type") + " " + resultSet.getString("table") + " " + resultSet.getString("type") + " " + resultSet.getString("key") + " " + resultSet.getString("rows") + " " + resultSet.getString("Extra"));
         }
         connection.close();
-
     }
 }

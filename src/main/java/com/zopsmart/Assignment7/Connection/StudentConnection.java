@@ -8,13 +8,13 @@ import java.sql.SQLException;
 /**
  * PostgresConnection class to connect to db
  */
-public class PostgresConnection {
+public class StudentConnection {
 
     /**
      * connection function to connect to db
      */
     public Connection connection() throws SQLException {
-        String url = "jdbc:postgresql://localhost:2006/zopsmart";
+        String url = "jdbc:postgresql://localhost:2006/student";
         String username = "Varun";
         String password = "varun";
 
