@@ -2,6 +2,7 @@ package com.zopsmart.assignment5.Service;
 
 import com.zopsmart.assignment5.Models.Commit;
 import com.zopsmart.assignment5.Exceptions.GitLogParsingException;
+import com.zopsmart.assignment9.Exceptions.StudentExceptions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -21,13 +22,13 @@ public class LogService {
     List<Commit> commits = new ArrayList<>();
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    private static final String filePath = "src/main/java/com/zopsmart/assignment5/resources/log.txt";
+//    private static final String filePath = "/home/raramuri/Java/zs-java-assignments-varun/src/main/java/com/zopsmart/assignment5/resources";
+  private static final String filePath = "/home/raramuri/Java/zs-java-assignments-varun/src/main/java/com/zopsmart/assignment5/resources/log.txt";
 
     /**
      * parseGitLog function For Implementation Of Reading and Parsing file
      */
     public List<Commit> parseGitLog(Date sinceDate) throws GitLogParsingException, FileNotFoundException, ParseException {
-        Map<String, Map<Date, Integer>> commitCounts = new HashMap<>();
         File file = new File(filePath);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         HashMap<String, String> monthNumber = new HashMap<>();
@@ -45,13 +46,12 @@ public class LogService {
         monthNumber.put("Dec", "12");
 
         if (!file.exists()) {
-            throw new FileNotFoundException("File not found ");
+            throw new GitLogParsingException("File not found at"+filePath);
         }
 
         Scanner scanner = new Scanner(file);
         scanner.useDelimiter("commit ");
 
-        List<Commit> commits = new ArrayList<>();
 
         while (scanner.hasNext()) {
             String commitText = scanner.next();
@@ -102,7 +102,6 @@ public class LogService {
             }
         }
 
-        System.out.println("Total count of commits by author since " + sinceDate + ":");
         return commitCounts;
     }
 
@@ -125,14 +124,13 @@ public class LogService {
             int count = authorCommitCounts.getOrDefault(sinceDate, 0);
             authorCommitCounts.put(sinceDate, count + 1);
         }
-        System.out.println("Count of commits by author and date since " + sinceDate + ":");
         return commitCounts;
     }
 
     /**
      * countDevelopers function List of developers who did not commit anything successively in 2 days
      */
-    public ArrayList<String> countDevelopers(String date) {
+    public ArrayList<String> countDevelopers(String date) throws GitLogParsingException {
         try {
             ArrayList<String> developers = new ArrayList<>();
             HashMap<String, ArrayList<String>> authorDateMap = new HashMap<>();
@@ -164,11 +162,9 @@ public class LogService {
                     }
                 }
             }
-            System.out.println("List of developers who did not commit anything successively in 2 days");
             return developers;
         } catch (ParseException e) {
-            Logger.getLogger(e.getMessage());
+            throw new RuntimeException(e);
         }
-        return null;
     }
 }

@@ -41,6 +41,8 @@ public class LogController {
             logger.info(String.valueOf(logService.countDevelopers(sinceDateString)));
         } catch (ParseException parseException) {
             Logger.getLogger(parseException.getMessage());
+        } catch (GitLogParsingException e) {
+            throw new RuntimeException(e);
         }
     }
 
