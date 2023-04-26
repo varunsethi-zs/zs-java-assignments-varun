@@ -21,8 +21,8 @@ public class StudentService {
     /**
      * createTable function to create the respective tables
      */
-    public void createTable()  {
-        try{
+    public void createTable() {
+        try {
             Connection connection = studentConnection.connection();
             Statement createStatement = connection.createStatement();
             Logger.getLogger("In table creation");
@@ -39,13 +39,13 @@ public class StudentService {
                     + ")";
             createStatement.executeUpdate(query);
             Logger.getLogger("Table Created Successfully");
-            query = "Insert into departments (name) Values('"+"CS Department"+"')";
+            query = "Insert into departments (name) Values('" + "CS Department" + "')";
             createStatement.executeUpdate(query);
-            query = "Insert into departments (name) Values('"+"ee Department"+"')";
+            query = "Insert into departments (name) Values('" + "ee Department" + "')";
             createStatement.executeUpdate(query);
-            query = "Insert into departments (name) Values('"+"mech Department"+"')";
+            query = "Insert into departments (name) Values('" + "mech Department" + "')";
             createStatement.executeUpdate(query);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -54,10 +54,10 @@ public class StudentService {
      * createRecords function to enter records in tables
      */
     public void createRecords() {
-        try{
+        try {
             Connection connection = studentConnection.connection();
             Statement enterEntries = connection.createStatement();
-            for (int i = 1; i <= 1000; i++) {
+            for (int i = 1; i <= 1000000; i++) {
                 int department_id = (int) (Math.random() * 3) + 1;
                 int id;
                 id = i;
@@ -70,7 +70,7 @@ public class StudentService {
                 insert = "INSERT INTO student_department (student_id, department_id) VALUES (" + i + ", " + department_id + ")";
                 enterEntries.executeUpdate(insert);
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -81,7 +81,7 @@ public class StudentService {
 
     public void extractDataInFile() {
 
-        try(Connection connection = studentConnection.connection();) {
+        try (Connection connection = studentConnection.connection();) {
             Statement statement = connection.createStatement();
             String select = "SELECT s.id, s.first_name, s.last_name, s.mobile, d.name AS department FROM students s JOIN student_department sd ON s.id = sd.student_id JOIN departments d ON sd.department_id = d.id";
             ResultSet resultSet = statement.executeQuery(select);
@@ -126,9 +126,7 @@ public class StudentService {
     public void explainQuery() {
         try (Connection connection = studentConnection.connection()) {
             Statement explainStatement = connection.createStatement();
-             ResultSet resultSet = explainStatement.executeQuery("EXPLAIN SELECT * FROM Student_Department");
-
-            // 4. Print the results to the console
+            ResultSet resultSet = explainStatement.executeQuery("EXPLAIN SELECT * FROM Student_Department");
             while (resultSet.next()) {
                 System.out.println(resultSet.getString(1));
             }

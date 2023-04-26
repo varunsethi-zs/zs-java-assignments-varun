@@ -18,14 +18,11 @@ public class StudentController {
      * useDatabase function to take input from user to implement particular service operations
      */
     public void useDatabase() throws SQLException {
-        Scanner scanner = new Scanner(System.in);
         StudentService studentService = new StudentService();
         studentService.createTable();
         studentService.createRecords();
         studentService.extractDataInFile();
         studentService.fileCompression();
         studentService.explainQuery();
-
-
     }
 }
