@@ -23,6 +23,5 @@ public class StudentController {
         studentService.createRecords();
         studentService.extractDataInFile();
         studentService.fileCompression();
-        studentService.explainQuery();
     }
 }

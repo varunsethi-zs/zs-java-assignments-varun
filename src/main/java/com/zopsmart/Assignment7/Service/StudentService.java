@@ -119,20 +119,4 @@ public class StudentService {
             Logger.getLogger(e.getMessage());
         }
     }
-
-    /**
-     * explainQuery function to explain the respective Query
-     */
-    public void explainQuery() {
-        try (Connection connection = studentConnection.connection()) {
-            Statement explainStatement = connection.createStatement();
-            ResultSet resultSet = explainStatement.executeQuery("EXPLAIN SELECT * FROM Student_Department");
-            while (resultSet.next()) {
-                System.out.println(resultSet.getString(1));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }
