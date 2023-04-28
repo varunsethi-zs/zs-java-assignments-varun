@@ -30,7 +30,7 @@ public class StudentService {
      */
     public void createTable() {
         try {
-            Connection connection = studentConnection.connection();
+            Connection connection = studentConnection.getconnection();
             Statement createStatement = connection.createStatement();
             Logger.getLogger("In table creation");
             String query = "CREATE TABLE students (id SERIAL PRIMARY KEY, first_name VARCHAR(50), last_name VARCHAR(50), mobile VARCHAR(15))";
@@ -59,7 +59,7 @@ public class StudentService {
     public void createRecords() {
         try {
             List<Students> students = createStudents();
-            Connection connection = studentConnection.connection();
+            Connection connection = studentConnection.getconnection();
             String query = "INSERT INTO students (first_name, last_name, mobile_number,department_id) VALUES (?, ?, ?, ?)";
             PreparedStatement prepareStatement = connection.prepareStatement(query);
             for (Students student : students) {
@@ -83,7 +83,7 @@ public class StudentService {
 
     public void extractDataInFile() {
 
-        try (Connection connection = studentConnection.connection();) {
+        try (Connection connection = studentConnection.getconnection();) {
             Statement statement = connection.createStatement();
             String select = "SELECT s.id, s.first_name, s.last_name, s.mobile, d.name AS department FROM students s JOIN student_department sd ON s.id = sd.student_id JOIN departments d ON sd.department_id = d.id";
             ResultSet resultSet = statement.executeQuery(select);
