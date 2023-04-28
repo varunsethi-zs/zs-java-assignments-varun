@@ -101,4 +101,10 @@ public class StudentServiceTest {
         assertEquals(expectedStudent, actualStudent);
     }
 
+    @Test
+    public void testCreateStudentTable() throws SQLException {
+        doNothing().when(studentDao).createStudentTable();
+        studentService.createStudentTable();
+        verify(studentDao, times(1)).createStudentTable();
+    }
 }
