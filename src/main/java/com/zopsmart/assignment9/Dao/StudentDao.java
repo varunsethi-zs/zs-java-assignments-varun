@@ -27,7 +27,7 @@ public class StudentDao {
 
     public Student createStudent(String firstName, String lastName) {
 
-        String query = "INSERT INTO student (first_name, last_name) VALUES (?, ?);";
+        String query = "INSERT INTO student (first_name, last_name) VALUES (?, ?)";
         try  {
             connection = connection();
             PreparedStatement prepareStatement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
