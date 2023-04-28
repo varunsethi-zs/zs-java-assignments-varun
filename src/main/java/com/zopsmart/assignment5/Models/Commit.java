@@ -4,7 +4,7 @@ import java.util.Date;
 
 
 /**
- * Commit Class to Get details for all commits
+ * Commit Class to Get details for all the commits
  */
 public class Commit {
     public String author;
@@ -32,5 +32,4 @@ public class Commit {
     public String getMessage() {
         return message;
     }
-
 }

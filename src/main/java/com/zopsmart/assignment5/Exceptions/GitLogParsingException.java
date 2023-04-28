@@ -1,4 +1,4 @@
-package com.zopsmart.assignment5.Models;
+package com.zopsmart.assignment5.Exceptions;
 
 
 /**
@@ -7,7 +7,9 @@ package com.zopsmart.assignment5.Models;
 public class GitLogParsingException extends Exception {
 
 
-    /** GitLogParsingException Parameterized Constructor*/
+    /**
+     * GitLogParsingException Parameterized Constructor
+     */
     public GitLogParsingException(String message) {
         super(message);
     }
