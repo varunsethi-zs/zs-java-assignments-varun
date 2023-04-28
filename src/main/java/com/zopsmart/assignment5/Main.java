@@ -2,7 +2,6 @@ package com.zopsmart.assignment5;
 
 import com.zopsmart.assignment5.Controller.LogController;
 
-import java.text.ParseException;
 
 
 /**

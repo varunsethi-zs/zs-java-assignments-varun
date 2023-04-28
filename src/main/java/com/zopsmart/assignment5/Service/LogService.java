@@ -2,7 +2,6 @@ package com.zopsmart.assignment5.Service;
 
 import com.zopsmart.assignment5.Models.Commit;
 import com.zopsmart.assignment5.Exceptions.GitLogParsingException;
-import com.zopsmart.assignment9.Exceptions.StudentExceptions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,7 +10,6 @@ import java.text.SimpleDateFormat;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 
 /**
@@ -22,14 +20,13 @@ public class LogService {
     List<Commit> commits = new ArrayList<>();
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-//    private static final String filePath = "/home/raramuri/Java/zs-java-assignments-varun/src/main/java/com/zopsmart/assignment5/resources";
-  private static final String filePath = "/home/raramuri/Java/zs-java-assignments-varun/src/main/java/com/zopsmart/assignment5/resources/log.txt";
+  private static final String FILEPATH = "/home/raramuri/Java/zs-java-assignments-varun/src/main/java/com/zopsmart/assignment5/resources/log.txt";
 
     /**
      * parseGitLog function For Implementation Of Reading and Parsing file
      */
     public List<Commit> parseGitLog(Date sinceDate) throws GitLogParsingException, FileNotFoundException, ParseException {
-        File file = new File(filePath);
+        File file = new File(FILEPATH);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         HashMap<String, String> monthNumber = new HashMap<>();
         monthNumber.put("Jan", "01");
@@ -46,7 +43,7 @@ public class LogService {
         monthNumber.put("Dec", "12");
 
         if (!file.exists()) {
-            throw new GitLogParsingException("File not found at"+filePath);
+            throw new GitLogParsingException("File not found at"+ FILEPATH);
         }
 
         Scanner scanner = new Scanner(file);
