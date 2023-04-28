@@ -2,19 +2,18 @@ package com.zopsmart.Assignment7.Model;
 
 public class Students {
 
-   public   int id;
-   public String firstname;
+    public int id;
+    public String firstname;
     public String lastname;
-
     public String mobileNumber;
-     public int departmentID;
+    public int departmentID;
 
     public Students(int id, String firstname, String lastname, String mobileNumber, int departmentID) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.mobileNumber = mobileNumber;
-        this.departmentID=departmentID;
+        this.departmentID = departmentID;
     }
 
     public int getId() {

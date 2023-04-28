@@ -2,6 +2,7 @@ package com.zopsmart.Assignment7;
 
 import com.zopsmart.Assignment7.Controller.StudentController;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
@@ -16,6 +17,8 @@ public class StudentMain {
             studentController.useDatabase();
         } catch (SQLException sqlException) {
             Logger.getLogger(sqlException.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

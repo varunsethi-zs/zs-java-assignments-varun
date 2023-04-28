@@ -11,9 +11,9 @@ import java.sql.SQLException;
 public class StudentConnection {
 
 
-    private static final String url = "jdbc:postgresql://localhost:2006/student";
-    private static final String username = "Varun";
-    private static final String password = "varun";
+    private static final String URL = "jdbc:postgresql://localhost:2006/student";
+    private static final String USERNAME = "Varun";
+    private static final String PASSWORD = "varun";
 
     /**
      * getconnection function to connect to db
@@ -21,7 +21,7 @@ public class StudentConnection {
     public Connection getconnection() throws SQLException {
 
         Connection con = DriverManager.getConnection(
-                url, username, password);
+                URL, USERNAME, PASSWORD);
 
         return con;
     }
