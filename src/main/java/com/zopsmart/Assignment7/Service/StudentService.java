@@ -2,7 +2,8 @@ package com.zopsmart.Assignment7.Service;
 
 import com.zopsmart.Assignment7.Connection.StudentConnection;
 import com.zopsmart.Assignment7.Model.Students;
-import org.junit.platform.commons.logging.LoggerFactory;
+import com.zopsmart.assignment5.Controller.LogController;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,8 +22,8 @@ import java.util.zip.GZIPOutputStream;
 public class StudentService {
     StudentConnection studentConnection = new StudentConnection();
     public List<Students> studentsList = new ArrayList<>();
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(StudentService.class.getName().getClass());
-
+    private static final int RECORDS = 1000000;
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(LogController.class.getName());
     private static final String FILEPATH = "/home/raramuri/Java/zs-java-assignments-varun/src/main/java/com/zopsmart/Assignment7/resources/output.txt";
 
     /**
@@ -50,31 +51,27 @@ public class StudentService {
     /**
      * createRecords function to enter records in tables
      */
-    public void createRecords() {
-        try {
-            List<Students> students = createStudents();
-            Connection connection = studentConnection.getconnection();
-            String query = "INSERT INTO students (first_name, last_name, mobile_number,department_id) VALUES (?, ?, ?, ?)";
-            PreparedStatement prepareStatement = connection.prepareStatement(query);
-            int batchTotal = 0;
-            for (Students student : students) {
-                prepareStatement.setString(1, student.getFirstName());
-                prepareStatement.setString(2, student.getLastName());
-                prepareStatement.setString(3, student.getMobileNumber());
-                prepareStatement.setInt(4, student.getDepartmentID());
-                prepareStatement.addBatch();
-                if (batchTotal++ == 10000) {
-                    prepareStatement.executeBatch();
-                    prepareStatement.clearBatch();
-                    batchTotal = 0;
-                }
-                if (batchTotal > 0)
-                    prepareStatement.executeBatch();
+    public void createRecords() throws SQLException {
+        List<Students> students = createStudents();
+        Connection connection = studentConnection.getconnection();
+        String query = "INSERT INTO students (first_name, last_name, mobile_number,department_id) VALUES (?, ?, ?, ?)";
+        PreparedStatement prepareStatement = connection.prepareStatement(query);
+        int batchTotal = 0;
+        for (Students student : students) {
+            prepareStatement.setString(1, student.getFirstName());
+            prepareStatement.setString(2, student.getLastName());
+            prepareStatement.setString(3, student.getMobileNumber());
+            prepareStatement.setInt(4, student.getDepartmentID());
+            prepareStatement.addBatch();
+            if (batchTotal++ == 10000) {
+                prepareStatement.executeBatch();
+                prepareStatement.clearBatch();
+                batchTotal = 0;
             }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+            if (batchTotal > 0)
+                prepareStatement.executeBatch();
         }
+
     }
 
     /**
@@ -92,7 +89,7 @@ public class StudentService {
                     writer.write(resultSet.getInt("id") + ", " + resultSet.getString("first_name") + ", " + resultSet.getString("last_name") + ", " + resultSet.getString("mobile") + ", " + resultSet.getString("department") + "\n");
                 }
             } catch (IOException | SQLException e) {
-                e.printStackTrace();
+                logger.error(e.getMessage());
             }
         }
     }
@@ -103,7 +100,7 @@ public class StudentService {
      */
 
     public void fileCompression() {
-        try( FileInputStream inputStream = new FileInputStream(FILEPATH);
+        try (FileInputStream inputStream = new FileInputStream(FILEPATH);
              GZIPOutputStream outputStream = new GZIPOutputStream(new FileOutputStream(FILEPATH))) {
             byte[] buffer = new byte[1024];
             int length;
@@ -111,7 +108,7 @@ public class StudentService {
                 outputStream.write(buffer, 0, length);
             }
         } catch (Exception e) {
-            Logger.getLogger(e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -119,7 +116,7 @@ public class StudentService {
      * createStudents function to enter a million records
      */
     public List<Students> createStudents() {
-        for (int i = 1; i <= 1000000; i++) {
+        for (int i = 1; i <= RECORDS; i++) {
             String firstName = "F" + i;
             String lastName = "L" + i;
             String mobileNumber = "94152" + String.format("%05d", i);

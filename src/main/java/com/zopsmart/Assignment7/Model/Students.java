@@ -3,15 +3,15 @@ package com.zopsmart.Assignment7.Model;
 public class Students {
 
     public int id;
-    public String firstname;
-    public String lastname;
+    public String firstName;
+    public String lastName;
     public String mobileNumber;
     public int departmentID;
 
-    public Students(int id, String firstname, String lastname, String mobileNumber, int departmentID) {
+    public Students(int id, String firstName, String lastName, String mobileNumber, int departmentID) {
         this.id = id;
-        this.firstname = firstname;
-        this.lastname = lastname;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.mobileNumber = mobileNumber;
         this.departmentID = departmentID;
     }
@@ -21,11 +21,11 @@ public class Students {
     }
 
     public String getFirstName() {
-        return firstname;
+        return firstName;
     }
 
     public String getLastName() {
-        return lastname;
+        return lastName;
     }
 
     public String getMobileNumber() {
