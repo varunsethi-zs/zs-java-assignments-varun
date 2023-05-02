@@ -12,13 +12,7 @@ import java.util.logging.Logger;
 public class StudentMain {
 
     public static void main(String[] args) {
-        try {
-            StudentController studentController = new StudentController();
-            studentController.useDatabase();
-        } catch (SQLException sqlException) {
-            Logger.getLogger(sqlException.getMessage());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        StudentController studentController = new StudentController();
+        studentController.useDatabase();
     }
 }
