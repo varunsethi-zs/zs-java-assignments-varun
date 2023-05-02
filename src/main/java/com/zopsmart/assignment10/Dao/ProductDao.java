@@ -34,7 +34,7 @@ public class ProductDao {
     /**
      * findAll function to retrieve all products fro database
      */
-    public List<Product> findAll() {
+    public List<Product> findAll() throws SQLException {
 
 
         List<Product> products = new ArrayList<>();
@@ -48,8 +48,6 @@ public class ProductDao {
                     products.add(createProductFromResultSet(resultSet));
                 }
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error finding all products", e);
         }
         return products;
     }
@@ -57,7 +55,7 @@ public class ProductDao {
     /**
      * findById function to retrieve products by ID
      */
-    public Product findById(int id) {
+    public Product findById(int id) throws SQLException {
 
         try (Connection connection = DriverManager.getConnection(
                 URL, USERNAME, PASSWORD)) {
@@ -70,15 +68,13 @@ public class ProductDao {
                     return null;
                 }
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error finding product by id " + id, e);
         }
     }
 
     /**
      * saveProduct function to insert product entry in database
      */
-    public void saveProduct(Product product) {
+    public void saveProduct(Product product) throws SQLException {
         try (Connection connection = DriverManager.getConnection(
                 URL, USERNAME, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(
@@ -87,15 +83,13 @@ public class ProductDao {
             statement.setDouble(2, product.getPrice());
             statement.setString(3, product.getDescription());
             statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error in inserting product ");
         }
     }
 
     /**
      * updateProduct function to update any product through Id
      */
-    public void updateProduct(Product product, int id) {
+    public void updateProduct(Product product, int id) throws SQLException {
         try (Connection connection = DriverManager.getConnection(
                 URL, USERNAME, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(
@@ -105,9 +99,6 @@ public class ProductDao {
             statement.setString(2, product.getDescription());
             statement.setInt(4, id);
             statement.executeUpdate();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            throw new RuntimeException("Error updating product ");
         }
     }
 
@@ -115,14 +106,12 @@ public class ProductDao {
      * deleteById function to delete a product entry from database through ID
      */
 
-    public void deleteById(int id) {
+    public void deleteById(int id) throws SQLException {
         try (Connection connection = DriverManager.getConnection(
                 URL, USERNAME, PASSWORD)) {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM product WHERE id = ?");
             statement.setInt(1, id);
             statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException("Error deleting product by id " + id, e);
         }
     }
 
@@ -130,7 +119,7 @@ public class ProductDao {
      * exists function to check wheather a product exists
      */
 
-    public boolean exists(int id) {
+    public boolean exists(int id) throws SQLException {
         try (Connection connection = DriverManager.getConnection(
                 URL, USERNAME, PASSWORD)) {
             PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM product WHERE id = ?");
@@ -142,8 +131,6 @@ public class ProductDao {
                     return false;
                 }
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error checking if product exists by id " + id);
         }
     }
 
