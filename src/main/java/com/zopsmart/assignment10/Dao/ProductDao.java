@@ -13,9 +13,9 @@ public class ProductDao {
 
 
     public Product product;
-    private final String url;
-    private final String username;
-    private final String password;
+    private final String URL;
+    private final String USERNAME;
+    private final String PASSWORD;
     private static final String FILEPATH = "/home/raramuri/Java/zs-java-assignments-varun/src/main/java/com/zopsmart/assignment10/Properties/postgresql.properties";
 
 
@@ -26,9 +26,9 @@ public class ProductDao {
         try (FileInputStream inputStream = new FileInputStream(FILEPATH)) {
             Properties properties = new Properties();
             properties.load(inputStream);
-            url = properties.getProperty("database.url");
-            username = properties.getProperty("database.username");
-            password = properties.getProperty("database.password");
+            URL = properties.getProperty("database.url");
+            USERNAME = properties.getProperty("database.username");
+            PASSWORD = properties.getProperty("database.password");
         } catch (IOException e) {
             throw new RuntimeException("Error loading database properties file", e);
         }
@@ -42,7 +42,7 @@ public class ProductDao {
 
         List<Product> products = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(
-                url, username, password)) {
+                URL, USERNAME, PASSWORD)) {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM product");
 
             ResultSet resultSet = statement.executeQuery();
@@ -63,7 +63,7 @@ public class ProductDao {
     public Product findById(int id) {
 
         try (Connection connection = DriverManager.getConnection(
-                url, username, password)) {
+                URL, USERNAME, PASSWORD)) {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM product WHERE id = ?");
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -83,7 +83,7 @@ public class ProductDao {
      */
     public void saveProduct() {
         try (Connection connection = DriverManager.getConnection(
-                url, username, password);
+                URL, USERNAME, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(
                      "INSERT INTO product (id,name,price,description) VALUES (?, ?, ?,?)")) {
             statement.setString(1, product.getName());
@@ -100,7 +100,7 @@ public class ProductDao {
      */
     public void updateProduct() {
         try (Connection connection = DriverManager.getConnection(
-                url, username, password);
+                URL, USERNAME, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(
                      "UPDATE product SET name = ?, description = ?, price = ? WHERE id = ?")) {
             statement.setString(1, product.getName());
@@ -119,7 +119,7 @@ public class ProductDao {
 
     public void deleteById(int id) {
         try (Connection connection = DriverManager.getConnection(
-                url, username, password)) {
+                URL, USERNAME, PASSWORD)) {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM product WHERE id = ?");
             statement.setInt(1, id);
             statement.executeUpdate();
@@ -134,7 +134,7 @@ public class ProductDao {
 
     public boolean exists(int id) {
         try (Connection connection = DriverManager.getConnection(
-                url, username, password)) {
+                URL, USERNAME, PASSWORD)) {
             PreparedStatement statement = connection.prepareStatement("SELECT COUNT(*) FROM product WHERE id = ?");
             statement.setInt(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -165,7 +165,7 @@ public class ProductDao {
      */
     public void createProductTable() throws SQLException {
         try (Connection connection = DriverManager.getConnection(
-                url, username, password)) {
+                URL, USERNAME, PASSWORD)) {
             String query = "CREATE TABLE product(id INTEGER ,name VARCHAR(70),price Decimal(10,2),description TEXT);";
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(query);
