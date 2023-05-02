@@ -11,13 +11,10 @@ import java.util.Properties;
 
 public class ProductDao {
 
-
-    public Product product;
     private final String URL;
     private final String USERNAME;
     private final String PASSWORD;
-    private static final String FILEPATH = "/home/raramuri/Java/zs-java-assignments-varun/src/main/java/com/zopsmart/assignment10/Properties/postgresql.properties";
-
+    private static final String FILEPATH = "/home/raramuri/Java/zs-java-assignments-varun/src/main/resources/postgresql.properties";
 
     /**
      * ProductDao constructor to get required parameters for connection from properties file
@@ -81,11 +78,11 @@ public class ProductDao {
     /**
      * saveProduct function to insert product entry in database
      */
-    public void saveProduct() {
+    public void saveProduct(Product product) {
         try (Connection connection = DriverManager.getConnection(
                 URL, USERNAME, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(
-                     "INSERT INTO product (id,name,price,description) VALUES (?, ?, ?,?)")) {
+                     "INSERT INTO product (name,price,description) VALUES ( ?, ?,?)")) {
             statement.setString(1, product.getName());
             statement.setDouble(2, product.getPrice());
             statement.setString(3, product.getDescription());
@@ -98,17 +95,18 @@ public class ProductDao {
     /**
      * updateProduct function to update any product through Id
      */
-    public void updateProduct() {
+    public void updateProduct(Product product, int id) {
         try (Connection connection = DriverManager.getConnection(
                 URL, USERNAME, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(
                      "UPDATE product SET name = ?, description = ?, price = ? WHERE id = ?")) {
             statement.setString(1, product.getName());
-            statement.setDouble(2, product.getPrice());
-            statement.setString(3, product.getDescription());
-            statement.setLong(4, product.getId());
+            statement.setDouble(3, product.getPrice());
+            statement.setString(2, product.getDescription());
+            statement.setInt(4, id);
             statement.executeUpdate();
         } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
             throw new RuntimeException("Error updating product ");
         }
     }
@@ -157,7 +155,7 @@ public class ProductDao {
         String name = resultSet.getString("name");
         String description = resultSet.getString("description");
         Double price = resultSet.getDouble("price");
-        return new Product(id, name, description, price);
+        return new Product(name, id, price, description);
     }
 
     /**
@@ -166,7 +164,7 @@ public class ProductDao {
     public void createProductTable() throws SQLException {
         try (Connection connection = DriverManager.getConnection(
                 URL, USERNAME, PASSWORD)) {
-            String query = "CREATE TABLE product(id INTEGER ,name VARCHAR(70),price Decimal(10,2),description TEXT);";
+            String query = "CREATE TABLE IF NOT EXISTS product(id SERIAL ,name VARCHAR(70),price Decimal(10,2),description TEXT);";
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate(query);
             }

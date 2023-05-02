@@ -42,16 +42,16 @@ public class ProductService {
      * saveProduct function to call Dao saveProduct function
      */
 
-    public void saveProduct() throws SQLException {
-        productDao.saveProduct();
+    public void saveProduct(Product product) throws SQLException {
+        productDao.saveProduct(product);
     }
 
     /**
      * updateProduct function to call Dao updateProduct function
      */
 
-    public void updateProduct() throws SQLException {
-        productDao.updateProduct();
+    public void updateProduct(Product product,int id) throws SQLException {
+        productDao.updateProduct(product,id);
     }
 
     /**

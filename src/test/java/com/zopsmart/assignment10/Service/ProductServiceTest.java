@@ -30,8 +30,8 @@ class ProductServiceTest {
 
     @Test
     public void testGetAllProducts() throws SQLException {
-        Product product1 = new Product(1, "Product 1", "electronics", 2200.0);
-        Product product2 = new Product(2, "Product 2", "Grocery", 100.0);
+        Product product1 = new Product("television",1, 440000.0,"electronics");
+        Product product2 = new Product("Fruits",2, 80.0,"grocerry");
         List<Product> expectedProducts = Arrays.asList(product1, product2);
         when(productDao.findAll()).thenReturn(expectedProducts);
         List<Product> actualProducts = productService.getAllProducts();
@@ -41,7 +41,7 @@ class ProductServiceTest {
 
     @Test
     public void testGetProductById() throws SQLException {
-        Product expectedProduct = new Product(1, "Product 1", "electronics", 2200.0);
+        Product expectedProduct = new Product("television",1, 440000.0,"electronics");
         when(productDao.findById(1)).thenReturn(expectedProduct);
         Product actualProduct = productService.getProductById(1);
         verify(productDao).findById(1);

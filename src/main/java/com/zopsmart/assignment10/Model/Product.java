@@ -9,9 +9,25 @@ public class Product {
     private Double price;
     private String description;
 
-    public Product( int id,String name,String description,Double price) {
+    @Override
+    public String toString() {
+        return "Product{" +
+                "name='" + name + '\'' +
+                ", id=" + id +
+                ", price=" + price +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
+    public Product(String name, Integer id, Double price, String description) {
         this.name = name;
         this.id = id;
+        this.price = price;
+        this.description = description;
+    }
+
+    public Product(String name, String description, Double price) {
+        this.name = name;
         this.price = price;
         this.description = description;
     }
