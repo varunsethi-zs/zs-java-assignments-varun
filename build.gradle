@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot' version '3.0.6'
+    id 'io.spring.dependency-management' version '1.1.0'
 }
 
 group 'org.example'
@@ -23,7 +25,14 @@ dependencies {
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: versionMockito
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: versionMockito
     testImplementation 'junit:junit:4.13.1'
-    implementation 'org.postgresql:postgresql:42.6.0'
+//    implementation 'org.postgresql:postgresql:42.6.0'
+
+    //springboot
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 test {
