@@ -9,8 +9,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -41,6 +43,9 @@ public class ProductServiceTest {
 
         product = new Product("Laptop", 50000.00, category);
         productDao.save(product);
+    }
+    public ProductServiceTest() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @AfterEach
@@ -80,26 +85,67 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testCreateProduct() {
-        Category newCategory = new Category("Books");
-        categoryDao.save(newCategory); // save category to generate an id
-        Product newProduct = new Product("Book", 100.00, newCategory);
-        productService.createProduct(newProduct);
-        assertNotNull(newProduct.getId());
-        Optional<Product> optionalProduct = productDao.findById(newProduct.getId());
-        assertTrue(optionalProduct.isPresent());
-        Product foundProduct = optionalProduct.get();
-        assertEquals(newProduct.getName(), foundProduct.getName());
-        assertEquals(newProduct.getPrice(), foundProduct.getPrice(), 0.001);
-        assertEquals(newProduct.getCategory().getName(), foundProduct.getCategory().getName());
+    void testCreateProduct() {
+
+        Product savedProduct = productService.createProduct(product);
+
+        assertNotNull(savedProduct);
+        assertNotNull(savedProduct.getId());
+        assertEquals("Laptop", savedProduct.getName());
+        assertEquals(50000.00, savedProduct.getPrice());
+        assertEquals("Electronics", savedProduct.getCategory().getName());
+    }
+    @Test
+    void testCreateProductWithInvalidParameters() {
+
+        Category category = new Category("Electronics");
+        Product product = new Product(null, -1000.00, category);
+        assertThrows(IllegalArgumentException.class, () -> {
+            productService.createProduct(product);
+        });
+    }
+    @Test
+    void testCreateProductWithExistingCategory() {
+        Product product = new Product("Smartphone", 15000.00,category);
+
+        Product savedProduct = productService.createProduct(product);
+
+        assertNotNull(savedProduct);
+        assertNotNull(savedProduct.getId());
+        assertEquals("Smartphone", savedProduct.getName());
+        assertEquals("Electronics", savedProduct.getCategory().getName());
+        assertEquals(15000.00, savedProduct.getPrice());
     }
 
+    @Test
+    void testCreateProductWithNewCategory() {
+        Category category = new Category("Clothing");
+        categoryDao.save(category);
+        Product product = new Product("Shirt", 2900.99,category);
+
+        Product savedProduct = productService.createProduct(product);
+
+        assertNotNull(savedProduct);
+        assertNotNull(savedProduct.getId());
+        assertEquals("Shirt", savedProduct.getName());
+        assertEquals("Clothing", savedProduct.getCategory().getName());
+        assertEquals(2900.99, savedProduct.getPrice());
+        List<Category> categories = categoryDao.findByName("Clothing");
+        assertEquals(1, categories.size());
+        assertEquals("Clothing", categories.get(0).getName());
+    }
 
     @Test
     public void testDeleteProduct() throws ResourceNotFoundException {
         productService.deleteProduct(product.getId());
         Optional<Product> optionalProduct = productDao.findById(product.getId());
         assertFalse(optionalProduct.isPresent());
+    }
+
+    @Test
+    void testDeleteNonExistingProduct() {
+        Long productId = -1L;
+        assertThrows(ResourceNotFoundException.class, () -> productService.deleteProduct(productId));
     }
 
     @Test
@@ -115,11 +161,16 @@ public class ProductServiceTest {
         assertEquals(updatedProduct.getPrice(), foundProduct.getPrice(), 0.001);
         assertEquals(updatedProduct.getCategory().getName(), foundProduct.getCategory().getName());
     }
-
+    @Test
+    void testUpdateProductWithNonexistentId() {
+        product = productDao.save(product);
+        assertThrows(IllegalArgumentException.class, () -> {
+            productService.updateProduct(product.getId() + 1, new Product());
+        });
+    }
     @Test
     public void testDoesProductExists() {
         assertTrue(productService.doesProductExists(product.getId()));
         assertFalse(productService.doesProductExists(-1L));
     }
-
 }

@@ -1,20 +1,29 @@
 package com.zopsmart.assignment11.entity;
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import jakarta.persistence.*;
 
+
+@ApiModel(description = "Details about a product")
 @Entity
 @Table(name = "products")
 public class Product {
 
+
+    @ApiModelProperty(notes = "The unique ID of the product")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ApiModelProperty(notes = "The name of the product")
     private String name;
-
+    @ApiModelProperty(notes = "The price of the product")
     private Double price;
 
     @ManyToOne()
     @JoinColumn(name = "category_id")
+    @ApiModelProperty(notes = "The category of the product")
     private Category category;
 
 

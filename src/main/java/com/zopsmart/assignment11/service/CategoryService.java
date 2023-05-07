@@ -18,20 +18,27 @@ public class CategoryService {
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
+
     public Category getCategoryById(Long categoryId) throws ResourceNotFoundException {
         Optional<Category> category = categoryRepository.findById(categoryId);
         if (category.isEmpty()) {
-            throw new ResourceNotFoundException("Id not found"+categoryId);
+            throw new ResourceNotFoundException("Id not found" + categoryId);
         }
         return category.get();
     }
-    public Category createCategory(Category category) {
-        Long categoryId = category.getId();
-        if (!doesCategoryExists(categoryId)) {
-            return categoryRepository.save(category);
-        } else {
-            throw new RuntimeException("Category already exists: " + categoryId);
+
+    public Category addCategory(Category category) {
+        String categoryName = category.getName();
+        if (categoryName == null) {
+            throw new IllegalArgumentException("Category name cannot be null");
         }
+        List<Category> existingCategories = categoryRepository.findByName(categoryName);
+        if (!existingCategories.isEmpty()) {
+            category.setId(existingCategories.get(0).getId());
+        } else {
+            category = categoryRepository.save(category);
+        }
+        return category;
     }
 
     public Category updateCategory(Long categoryId, Category categoryDetails) throws ResourceNotFoundException {
@@ -40,8 +47,4 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-
-    public boolean doesCategoryExists(Long categoryId){
-        return categoryRepository.existsById(categoryId);
-    }
 }

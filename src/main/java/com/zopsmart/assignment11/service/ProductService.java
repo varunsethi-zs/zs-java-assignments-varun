@@ -33,8 +33,16 @@ public class ProductService {
     }
 
     public Product createProduct(Product product) {
-        Long categoryId = product.getCategory().getId();
-        if (!doesProductExists(categoryId)) {
+        String categoryName = product.getCategory().getName();
+        String productName = product.getName();
+        Double price = product.getPrice();
+        if (categoryName == null || productName == null || price <= 0) {
+            throw new IllegalArgumentException("Invalid parameters passed.");
+        }
+        List<Category> existingCategories = categoryDao.findByName(categoryName);
+        if (!existingCategories.isEmpty()) {
+            product.setCategory(existingCategories.get(0));
+        } else {
             categoryDao.save(product.getCategory());
         }
         return productRepository.save(product);
@@ -47,7 +55,6 @@ public class ProductService {
         }
         productRepository.deleteById(productId);
     }
-
 
     public Product updateProduct(Long id, Product updatedProduct) {
         Optional<Product> optionalProduct = productRepository.findById(id);
