@@ -1,6 +1,7 @@
 package com.zopsmart.assignment10.Controller;
 
 import com.zopsmart.assignment10.Dao.ProductDao;
+import com.zopsmart.assignment10.Exception.ProductNotFoundException;
 import com.zopsmart.assignment10.Model.Product;
 import com.zopsmart.assignment10.Service.ProductService;
 import org.slf4j.Logger;
@@ -21,9 +22,9 @@ public class ProductController {
     ProductService productService = new ProductService(productDao);
 
     /**
-     * setProductService function to take input from user and call service layer functions
+     * productServiceOperations function to take input from user and call service layer functions
      */
-    public void setProductService() {
+    public void productServiceOperations() {
         Scanner scanner = new Scanner(System.in);
         int choice;
         do {
@@ -111,6 +112,8 @@ public class ProductController {
                         break;
                     } catch (SQLException e) {
                         logger.error("Error in updating product details");
+                    } catch (ProductNotFoundException e) {
+                      logger.error("Product id not found"+e.getMessage());
                     }
                 case 7:
                     try {
@@ -119,12 +122,16 @@ public class ProductController {
                         productService.deleteProductById(productId);
                         logger.info("deleted product successfully");
                         break;
-                    } catch (SQLException e) {
+                    } catch (SQLException | ProductNotFoundException e) {
                         logger.error("id not found :" + e);
                     }
                 case 8:
                     break;
+                default:
+                    System.out.println("Invalid Choice");
+                    break;
             }
+
         } while (choice != 8);
     }
 }

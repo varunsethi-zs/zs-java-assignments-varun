@@ -1,5 +1,6 @@
 package com.zopsmart.assignment10.Dao;
 
+import com.zopsmart.assignment10.Exception.ProductNotFoundException;
 import com.zopsmart.assignment10.Model.Product;
 
 import java.io.FileInputStream;
@@ -89,7 +90,11 @@ public class ProductDao {
     /**
      * updateProduct function to update any product through Id
      */
-    public void updateProduct(Product product, int id) throws SQLException {
+    public void updateProduct(Product product, int id) throws SQLException, ProductNotFoundException {
+        if (!exists(id)) {
+            throw new ProductNotFoundException("Product with ID " + id + " not found");
+        }
+
         try (Connection connection = DriverManager.getConnection(
                 URL, USERNAME, PASSWORD);
              PreparedStatement statement = connection.prepareStatement(
@@ -106,12 +111,15 @@ public class ProductDao {
      * deleteById function to delete a product entry from database through ID
      */
 
-    public void deleteById(int id) throws SQLException {
+    public void deleteById(int id) throws SQLException, ProductNotFoundException {
         try (Connection connection = DriverManager.getConnection(
                 URL, USERNAME, PASSWORD)) {
             PreparedStatement statement = connection.prepareStatement("DELETE FROM product WHERE id = ?");
             statement.setInt(1, id);
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected == 0) {
+                throw new ProductNotFoundException("Product with ID " + id + " does not exist");
+            }
         }
     }
 

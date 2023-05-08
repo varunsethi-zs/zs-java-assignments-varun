@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) throws SQLException {
 
         ProductController productController = new ProductController();
-        productController.setProductService();
+        productController.productServiceOperations();
 
     }
 }

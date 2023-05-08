@@ -1,6 +1,7 @@
 package com.zopsmart.assignment10.Service;
 
 import com.zopsmart.assignment10.Dao.ProductDao;
+import com.zopsmart.assignment10.Exception.ProductNotFoundException;
 import com.zopsmart.assignment10.Model.Product;
 
 import java.sql.SQLException;
@@ -50,7 +51,7 @@ public class ProductService {
      * updateProduct function to call Dao updateProduct function
      */
 
-    public void updateProduct(Product product,int id) throws SQLException {
+    public void updateProduct(Product product,int id) throws SQLException, ProductNotFoundException {
         productDao.updateProduct(product,id);
     }
 
@@ -58,7 +59,7 @@ public class ProductService {
      * deleteProductById function to call Dao deleteById function
      */
 
-    public void deleteProductById(int productId) throws SQLException {
+    public void deleteProductById(int productId) throws SQLException, ProductNotFoundException  {
         productDao.deleteById(productId);
     }
 
