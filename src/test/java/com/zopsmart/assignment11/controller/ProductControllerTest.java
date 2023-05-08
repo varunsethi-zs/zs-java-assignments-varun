@@ -3,6 +3,7 @@ package com.zopsmart.assignment11.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zopsmart.assignment11.entity.Category;
 import com.zopsmart.assignment11.entity.Product;
+import com.zopsmart.assignment11.exception.ResourceNotFoundException;
 import com.zopsmart.assignment11.service.ProductService;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +40,6 @@ import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.mockito.ArgumentMatchers.any;
 
 
 @RunWith(SpringRunner.class)
@@ -178,6 +178,19 @@ public class ProductControllerTest {
                 .andExpect(header().doesNotExist("Custom-Header"));
     }
 
+
+    @Test
+    void testGetProductsByCategoryInternalServerError() throws Exception {
+        String categoryName = "fgxf";
+        mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
+        doThrow(new RuntimeException("Something went wrong"))
+                .when(productService).getProductsByCategory(categoryName);
+        mockMvc.perform(get("/products/{category}", categoryName))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$").doesNotExist());
+        verify(productService, times(1)).getProductsByCategory(categoryName);
+    }
+
     @Test
     public void testPostProduct() throws Exception {
 
@@ -274,4 +287,19 @@ public class ProductControllerTest {
 
         verify(productService, times(1)).deleteProduct(1L);
     }
+
+    @Test
+    void testDeleteNonExistentProduct() throws Exception {
+        Long productId = 999L;
+        mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
+
+        doThrow(new ResourceNotFoundException("Product with id " + productId + " not found"))
+                .when(productService).deleteProduct(productId);
+        mockMvc.perform(delete("/products/{id}", productId))
+                .andExpect(status().isNotFound());
+
+        verify(productService, times(1)).deleteProduct(productId);
+    }
+
+
 }

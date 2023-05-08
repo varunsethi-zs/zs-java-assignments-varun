@@ -36,9 +36,6 @@ dependencies {
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.0.2'
     implementation 'javax.servlet:javax.servlet-api:4.0.1'
 
-
-
-
 }
 
 test {

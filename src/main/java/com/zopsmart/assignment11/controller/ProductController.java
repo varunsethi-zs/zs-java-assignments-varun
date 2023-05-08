@@ -172,7 +172,7 @@ public class ProductController {
             return ResponseEntity.ok("Product with id " + productId + " deleted successfully");
         } catch (Exception e) {
             LOGGER.error("Error deleting product with id {}: {}", productId, e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 }

@@ -9,11 +9,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
@@ -45,6 +43,7 @@ public class ProductServiceTest {
         product = new Product("Laptop", 50000.00, category);
         productDao.save(product);
     }
+
     public ProductServiceTest() {
         MockitoAnnotations.openMocks(this);
     }
@@ -87,7 +86,7 @@ public class ProductServiceTest {
 
     @Test
     void getProductByCategory_shouldThrowIllegalArgumentException_whenCategoryNotFound() {
-         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
             productService.getProductsByCategory("Non-existing category");
         });
 
@@ -106,6 +105,7 @@ public class ProductServiceTest {
         assertEquals(50000.00, savedProduct.getPrice());
         assertEquals("Electronics", savedProduct.getCategory().getName());
     }
+
     @Test
     void testCreateProductWithInvalidParameters() {
 
@@ -115,9 +115,10 @@ public class ProductServiceTest {
             productService.createProduct(product);
         });
     }
+
     @Test
     void testCreateProductWithExistingCategory() {
-        Product product = new Product("Smartphone", 15000.00,category);
+        Product product = new Product("Smartphone", 15000.00, category);
 
         Product savedProduct = productService.createProduct(product);
 
@@ -132,7 +133,7 @@ public class ProductServiceTest {
     void testCreateProductWithNewCategory() {
         Category category = new Category("Clothing");
         categoryDao.save(category);
-        Product product = new Product("Shirt", 2900.99,category);
+        Product product = new Product("Shirt", 2900.99, category);
 
         Product savedProduct = productService.createProduct(product);
 
@@ -172,6 +173,7 @@ public class ProductServiceTest {
         assertEquals(updatedProduct.getPrice(), foundProduct.getPrice());
         assertEquals(updatedProduct.getCategory().getName(), foundProduct.getCategory().getName());
     }
+
     @Test
     void testUpdateProductWithNonexistentId() {
         product = productDao.save(product);
@@ -179,6 +181,7 @@ public class ProductServiceTest {
             productService.updateProduct(product.getId() + 1, new Product());
         });
     }
+
     @Test
     public void testDoesProductExists() {
         assertTrue(productService.doesProductExists(product.getId()));
