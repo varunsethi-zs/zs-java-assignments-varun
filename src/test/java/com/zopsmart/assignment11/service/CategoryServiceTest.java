@@ -109,7 +109,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    public void givenNonexistentCategoryId_whenUpdatingCategory_thenThrowsResourceNotFoundException() {
+    public void testUpdateProductResourceNotFoundException() {
         Category updatedCategory = new Category();
         updatedCategory.setName("Magazines");
 

@@ -289,7 +289,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    void testDeleteNonExistentProduct() throws Exception {
+    void testDeleteNonExistingProduct() throws Exception {
         Long productId = 999L;
         mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
 
