@@ -3,7 +3,6 @@ package com.zopsmart.assignment11.service;
 import com.zopsmart.assignment11.dao.CategoryDao;
 import com.zopsmart.assignment11.entity.Category;
 import com.zopsmart.assignment11.exception.ResourceNotFoundException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,7 +15,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 class CategoryServiceTest {
@@ -40,11 +38,7 @@ class CategoryServiceTest {
         expectedCategories.add(new Category("Electronics"));
         expectedCategories.add(new Category("Snacks"));
         when(categoryRepository.findAll()).thenReturn(expectedCategories);
-
-
         List<Category> actualCategories = categoryService.getAllCategories();
-
-
         assertEquals(expectedCategories.size(), actualCategories.size());
         assertEquals(expectedCategories.get(0).getName(), actualCategories.get(0).getName());
         assertEquals(expectedCategories.get(1).getName(), actualCategories.get(1).getName());

@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * ProductService class to implement Crud operation on Products
+ */
 @Service
 public class ProductService {
 
@@ -20,17 +23,36 @@ public class ProductService {
     @Autowired
     private CategoryDao categoryDao;
 
+
+    /**
+     * getAllProducts function to retrieve all products
+     */
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
+
+    /**
+     * getProductById function to retrieve product based on id provided
+     */
 
     public Optional<Product> getProductById(Long id) {
         return productRepository.findById(id);
     }
 
-    public List<Product> getProductsByCategory(String categoryName) {
+    /**
+     * getProductsByCategory function to retrieve all products based on category
+     */
+    public List<Product> getProductsByCategory(String categoryName) throws ResourceNotFoundException {
+        List<Category> categories = categoryDao.findByName(categoryName);
+        if (categories.isEmpty()) {
+            throw new ResourceNotFoundException("Category does not exists");
+        }
         return productRepository.findByCategoryName(categoryName);
     }
+
+    /**
+     * createProduct function to post new product
+     */
 
     public Product createProduct(Product product) {
         String categoryName = product.getCategory().getName();
@@ -48,6 +70,9 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    /**
+     * deleteProduct function to delete product based on id provided
+     */
     public void deleteProduct(Long productId) throws ResourceNotFoundException {
         boolean exists = doesProductExists(productId);
         if (!exists) {
@@ -55,6 +80,10 @@ public class ProductService {
         }
         productRepository.deleteById(productId);
     }
+
+    /**
+     * updateProduct function to update a product based on id provided
+     */
 
     public Product updateProduct(Long id, Product updatedProduct) {
         Optional<Product> optionalProduct = productRepository.findById(id);
@@ -88,6 +117,9 @@ public class ProductService {
     }
 
 
+    /**
+     * doesProductExists function to check whether a product exits corresponding to a given id
+     */
     public boolean doesProductExists(Long productId) {
         return productRepository.existsById(productId);
     }

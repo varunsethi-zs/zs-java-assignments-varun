@@ -5,6 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+/**
+ * CategoryDao class to call crud operation function through jpa repository
+ */
 public interface CategoryDao extends JpaRepository<Category, Long> {
+
+    /**
+     * findByName function to find category based on categoryName
+     */
     List<Category> findByName(String categoryName);
 }

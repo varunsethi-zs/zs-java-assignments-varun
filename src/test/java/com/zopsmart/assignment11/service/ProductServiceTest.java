@@ -9,6 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -70,12 +71,12 @@ public class ProductServiceTest {
         assertTrue(optionalProduct.isPresent());
         Product foundProduct = optionalProduct.get();
         assertEquals(product.getName(), foundProduct.getName());
-        assertEquals(product.getPrice(), foundProduct.getPrice(), 0.001);
+        assertEquals(product.getPrice(), foundProduct.getPrice());
         assertEquals(product.getCategory().getName(), foundProduct.getCategory().getName());
     }
 
     @Test
-    public void testGetProductsByCategory() {
+    public void testGetProductsByCategory() throws ResourceNotFoundException {
         List<Product> products = productService.getProductsByCategory(category.getName());
         assertNotNull(products);
         assertEquals(1, products.size());
@@ -83,6 +84,16 @@ public class ProductServiceTest {
         assertEquals(product.getPrice(), products.get(0).getPrice(), 0.001);
         assertEquals(product.getCategory().getName(), products.get(0).getCategory().getName());
     }
+
+    @Test
+    void getProductByCategory_shouldThrowIllegalArgumentException_whenCategoryNotFound() {
+         ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
+            productService.getProductsByCategory("Non-existing category");
+        });
+
+        assertEquals("Category does not exists", exception.getMessage());
+    }
+
 
     @Test
     void testCreateProduct() {
@@ -158,7 +169,7 @@ public class ProductServiceTest {
         assertTrue(optionalProduct.isPresent());
         Product foundProduct = optionalProduct.get();
         assertEquals(updatedProduct.getName(), foundProduct.getName());
-        assertEquals(updatedProduct.getPrice(), foundProduct.getPrice(), 0.001);
+        assertEquals(updatedProduct.getPrice(), foundProduct.getPrice());
         assertEquals(updatedProduct.getCategory().getName(), foundProduct.getCategory().getName());
     }
     @Test

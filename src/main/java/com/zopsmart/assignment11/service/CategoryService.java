@@ -15,9 +15,16 @@ public class CategoryService {
     @Autowired
     private CategoryDao categoryRepository;
 
+    /**
+     * getAllCategories function to retrieve all categories
+     */
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
+
+    /**
+     * getCategoryById function to retrieve category based on id provided
+     */
 
     public Category getCategoryById(Long categoryId) throws ResourceNotFoundException {
         Optional<Category> category = categoryRepository.findById(categoryId);
@@ -27,6 +34,10 @@ public class CategoryService {
         return category.get();
     }
 
+
+    /**
+     * addCategory function to create new category
+     */
     public Category addCategory(Category category) {
         String categoryName = category.getName();
         if (categoryName == null) {
@@ -41,6 +52,9 @@ public class CategoryService {
         return category;
     }
 
+    /**
+     * updateCategory function to update a category based on id
+     */
     public Category updateCategory(Long categoryId, Category categoryDetails) throws ResourceNotFoundException {
         Category category = getCategoryById(categoryId);
         category.setName(categoryDetails.getName());

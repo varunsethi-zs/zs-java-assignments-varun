@@ -1,6 +1,7 @@
 package com.zopsmart.assignment11.controller;
 
 import com.zopsmart.assignment11.entity.Category;
+import com.zopsmart.assignment11.exception.ResourceNotFoundException;
 import com.zopsmart.assignment11.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,14 +22,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
+
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -123,23 +126,112 @@ public class CategoryControllerTest {
     }
 
     @Test
-    public void testGetCategoryById() throws Exception {
-        Long categoryId = 1L;
+    public void testGetCategoryByIdSuccess() throws Exception {
+        Category category = new Category(1L, "Electronics");
+
+        when(categoryService.getCategoryById(1L)).thenReturn(category);
+
+        mockMvc.perform(get("/category/get/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("Electronics")))
+                .andExpect(header().string("Custom-Header", "Category Found Successfully"));
+    }
+
+    @Test
+    public void testGetCategoryByIdNotFound() throws Exception {
+        when(categoryService.getCategoryById(1L)).thenReturn(null);
+
+        mockMvc.perform(get("/category/get/1"))
+                .andExpect(status().isNotFound())
+                .andExpect(header().string("Custom-Header", "Category Not Found"));
+    }
+
+    @Test
+    public void testGetCategoryByIdResourceNotFoundException() throws Exception {
+        when(categoryService.getCategoryById(1L)).thenThrow(new ResourceNotFoundException("Category not found"));
+
+        mockMvc.perform(get("/category/get/1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testGetCategoryByIdInternalServerError() throws Exception {
+        when(categoryService.getCategoryById(1L)).thenThrow(new RuntimeException("Internal server error"));
+
+        mockMvc.perform(get("/category/get/1"))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    public void testUpdateCategorySuccess() throws Exception {
+
         Category category = new Category();
-        category.setName("Books");
-        Category addedCategory = categoryService.addCategory(category);
+        category.setId(1L);
+        category.setName("TestCategory");
 
-        when(categoryService.getCategoryById(categoryId)).thenReturn(addedCategory);
-        mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
+        String jsonRequest = "{\"name\": \"UpdatedTestCategory\"}";
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .put("/category/put/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequest);
 
 
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/get/{categoryId}", categoryId))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(addedCategory.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value(addedCategory.getName()))
-                .andReturn();
+        Mockito.when(categoryService.updateCategory(Mockito.anyLong(), Mockito.any(Category.class)))
+                .thenReturn(new Category(1L, "UpdatedTestCategory"));
 
-        String customHeader = result.getResponse().getHeader("Custom-Header");
-        assertEquals("Category Found Successfully", customHeader);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.name", is("UpdatedTestCategory")))
+                .andExpect(header().string("Custom-Header", "Category Updated Successfully"));
+    }
+
+    @Test
+    public void testUpdateCategoryNotFound() throws Exception {
+        String jsonRequest = "{\"name\": \"UpdatedTestCategory\"}";
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .put("/category/put/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(jsonRequest);
+
+        Mockito.when(categoryService.updateCategory(Mockito.anyLong(), Mockito.any(Category.class)))
+                .thenReturn(null);
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isNotFound())
+                .andExpect(header().string("Custom-Header", "Category Not Found"));
+    }
+    @Test
+    void testUpdateCategoryWithInvalidId() throws Exception {
+        Long categoryId = 456L;
+        Category category = new Category();
+        category.setName("Test Category");
+
+        Mockito.when(categoryService.updateCategory(Mockito.eq(categoryId), Mockito.any(Category.class)))
+                .thenThrow(new ResourceNotFoundException("Category not found"));
+
+        mockMvc.perform(put("/category/put/" + categoryId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(category)))
+                .andExpect(status().isNotFound());
+    }
+
+
+
+    @Test
+    void testUpdateCategoryWithException() throws Exception {
+        Long categoryId = 789L;
+        Category category = new Category();
+        category.setName("Test Category");
+
+        Mockito.when(categoryService.updateCategory(Mockito.eq(categoryId), Mockito.any(Category.class)))
+                .thenThrow(new RuntimeException("Internal Server Error"));
+
+        mockMvc.perform(put("/category/put/" + categoryId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(category)))
+                .andExpect(status().isInternalServerError());
+
     }
 }

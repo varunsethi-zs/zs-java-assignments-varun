@@ -3,10 +3,9 @@ package com.zopsmart.assignment11.controller;
 import com.zopsmart.assignment11.entity.Category;
 import com.zopsmart.assignment11.exception.ResourceNotFoundException;
 import com.zopsmart.assignment11.service.CategoryService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * CategoryController class to call service layer functions of category
+ */
+
 @RestController
 @RequestMapping("/category")
-@Api(value = "Category")
 public class CategoryController {
 
     @Autowired
@@ -27,11 +29,16 @@ public class CategoryController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
 
-    @ApiOperation(value = "View a list of available categories", response = List.class)
+
+    /**
+     * getAllCategories function to retrieve all categories
+     */
+
+    @Operation(summary = "View a list of available categories", tags = "Category")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved Categories"),
-            @ApiResponse(code = 404, message = "No category found"),
-            @ApiResponse(code = 500, message = "Internal Server Error")
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved Categories"),
+            @ApiResponse(responseCode = "404", description = "No category found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
 
     })
     @GetMapping("/get")
@@ -51,10 +58,14 @@ public class CategoryController {
         }
     }
 
-    @ApiOperation(value = "Add a new category")
+
+    /**
+     * postCategory function to create new category
+     */
+    @Operation(summary = "Add a new category", tags = "Category")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Category created successfully"),
-            @ApiResponse(code = 500, message = "Internal Server Error")
+            @ApiResponse(responseCode = "201", description = "Category created successfully"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PostMapping("/post")
     public ResponseEntity<Object> postCategory(@RequestBody Category category) {
@@ -69,12 +80,15 @@ public class CategoryController {
         }
     }
 
+    /**
+     * getCategoryById function to get category based on given id
+     */
 
-    @ApiOperation(value = "Get a category by its id")
+    @Operation(summary = "Get a category by its id", tags = "Category")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved category"),
-            @ApiResponse(code = 404, message = "Category not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error")
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved category with supplied id"),
+            @ApiResponse(responseCode = "404", description = "Category not found"),
+            @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("/get/{categoryId}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long categoryId) {
@@ -95,11 +109,15 @@ public class CategoryController {
         }
     }
 
-    @ApiOperation(value = "Update a category by ID")
+    /**
+     * updateCategory function to update a category with given id
+     */
+
+    @Operation(summary = "Update a category by ID", tags = "Category")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Category updated successfully"),
-            @ApiResponse(code = 404, message = "Category not found"),
-            @ApiResponse(code = 500, message = "Internal server error")
+            @ApiResponse(responseCode = "200", description = "Category updated successfully with supplied id"),
+            @ApiResponse(responseCode = "404", description = "Category not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping("/put/{categoryId}")
     public ResponseEntity<Category> updateCategory(@PathVariable Long categoryId, @RequestBody Category category) {
@@ -111,7 +129,7 @@ public class CategoryController {
                 return ResponseEntity.notFound().headers(headers).build();
             }
             headers.add("Custom-Header", "Category Updated Successfully");
-            return ResponseEntity.ok().body(updatedCategory);
+            return ResponseEntity.ok().headers(headers).body(updatedCategory);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception e) {
