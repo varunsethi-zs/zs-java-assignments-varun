@@ -9,21 +9,26 @@ repositories {
     mavenCentral()
 }
 def versionMockito = '4.11.0'
+def slf4j = '2.0.3'
+
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
-    testImplementation 'junit:junit:4.13.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    implementation 'org.postgresql:postgresql:42.6.0'
     implementation 'org.projectlombok:lombok:1.18.26'
     implementation 'org.junit.jupiter:junit-jupiter:5.8.1'
-    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation platform('org.junit:junit-bom:5.9.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 
     // Use JUnit Jupiter API for testing.
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.6.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.2'
     testImplementation group: 'org.mockito', name: 'mockito-inline', version: versionMockito
     testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: versionMockito
     testImplementation 'junit:junit:4.13.1'
     implementation 'org.postgresql:postgresql:42.6.0'
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: slf4j
+    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: slf4j
+
 }
 
 test {
