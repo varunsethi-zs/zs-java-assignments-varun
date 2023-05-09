@@ -95,15 +95,17 @@ class CategoryServiceTest {
         assertEquals(existingCategory.getName(), savedCategory.getName());
         verify(categoryRepository, never()).save(existingCategory);
     }
-@Test
-void testAddCategory_withNullName() {
-    Category category1 = new Category(null);
 
-    assertThrows(BadRequestException.class, () -> {
-        categoryService.addCategory(category1);
+    @Test
+    void testAddCategory_withNullName() {
+        Category category1 = new Category(null);
 
-});
-}
+        assertThrows(BadRequestException.class, () -> {
+            categoryService.addCategory(category1);
+
+        });
+    }
+
     @Test
     void testAddCategory_withEmptyName() {
         Category category1 = new Category("");

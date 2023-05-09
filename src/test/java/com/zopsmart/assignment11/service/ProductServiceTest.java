@@ -169,11 +169,11 @@ public class ProductServiceTest {
     void testDeleteInvalidId() {
         assertThrows(BadRequestException.class, () -> productService.deleteProduct(-2L));
     }
+
     @Test
     void deleteProduct_NonExistingProduct() {
         assertThrows(ResourceNotFoundException.class, () -> productService.deleteProduct(123L));
     }
-
 
 
     @Test
@@ -210,6 +210,7 @@ public class ProductServiceTest {
         Long productId = product.getId();
         assertTrue(productService.doesProductExists(productId));
     }
+
     @Test
     void testDoesProductExistsWithInvalidId() {
         Long productId = -1L;

@@ -29,7 +29,7 @@ public class CategoryService {
 
     public Category getCategoryById(Long categoryId) throws ResourceNotFoundException, BadRequestException {
 
-        if(categoryId<=0){
+        if (categoryId <= 0) {
             throw new BadRequestException("Invalid Id provided");
         }
         Optional<Category> category = categoryRepository.findById(categoryId);
@@ -45,7 +45,7 @@ public class CategoryService {
      */
     public Category addCategory(Category category) throws BadRequestException {
         String categoryName = category.getName();
-        if (categoryName == null|| categoryName.equals("")) {
+        if (categoryName == null || categoryName.equals("")) {
             throw new BadRequestException("Category name cannot be null or empty");
         }
         List<Category> existingCategories = categoryRepository.findByName(categoryName);

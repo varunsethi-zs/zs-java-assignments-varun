@@ -132,8 +132,6 @@ public class ProductControllerTest {
     }
 
 
-
-
     @Test
     public void testGetProductsByCategory() throws Exception {
         String categoryName = "Electronics";
@@ -160,7 +158,6 @@ public class ProductControllerTest {
                 .andExpect(header().string("Custom Header", "Product Found Successfully"))
                 .andExpect(header().doesNotExist("Custom-Header"));
     }
-
 
 
     @Test
@@ -196,7 +193,6 @@ public class ProductControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.category.id").value(1));
 
     }
-
 
 
     @Test

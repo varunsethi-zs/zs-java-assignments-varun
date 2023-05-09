@@ -51,14 +51,14 @@ public class CategoryControllerTest {
 
     ObjectMapper objectMapper;
 
-    Category category1 ;
-    Category category2 ;
+    Category category1;
+    Category category2;
 
     @BeforeEach
     public void setUp() {
         objectMapper = new ObjectMapper();
-     category1 = new Category(1L, "Category 1");
-      category2 = new Category(2L, "Category 2");
+        category1 = new Category(1L, "Category 1");
+        category2 = new Category(2L, "Category 2");
     }
 
     @Test
@@ -105,7 +105,6 @@ public class CategoryControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(1L))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Books"));
     }
-
 
 
     @Test
@@ -178,6 +177,7 @@ public class CategoryControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(header().string("Custom-Header", "Category Not Found"));
     }
+
     @Test
     void testUpdateCategoryWithInvalidId() throws Exception {
         Long categoryId = 456L;

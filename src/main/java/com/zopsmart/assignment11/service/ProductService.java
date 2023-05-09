@@ -36,10 +36,10 @@ public class ProductService {
      * getProductById function to retrieve product based on id provided
      */
 
-    public Optional<Product> getProductById(Long id) throws  BadRequestException {
+    public Optional<Product> getProductById(Long id) throws BadRequestException {
 
-        if(id<=0){
-            throw new  BadRequestException("No product exists for this id");
+        if (id <= 0) {
+            throw new BadRequestException("No product exists for this id");
         }
         return productRepository.findById(id);
     }
@@ -127,7 +127,7 @@ public class ProductService {
      */
     public boolean doesProductExists(Long productId) throws BadRequestException {
 
-        if(productId<=0){
+        if (productId <= 0) {
             throw new BadRequestException("Invalid id provided");
         }
         return productRepository.existsById(productId);
