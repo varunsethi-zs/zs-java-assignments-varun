@@ -128,7 +128,7 @@ public class ProductController {
                 case 8:
                     break;
                 default:
-                    System.out.println("Invalid Choice");
+                  logger.info("Invalid choice");
                     break;
             }
 
