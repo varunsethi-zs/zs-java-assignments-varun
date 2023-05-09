@@ -4,6 +4,7 @@ import com.zopsmart.assignment11.dao.CategoryDao;
 import com.zopsmart.assignment11.dao.ProductDao;
 import com.zopsmart.assignment11.entity.Category;
 import com.zopsmart.assignment11.entity.Product;
+import com.zopsmart.assignment11.exception.BadRequestException;
 import com.zopsmart.assignment11.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,11 @@ public class ProductService {
      * getProductById function to retrieve product based on id provided
      */
 
-    public Optional<Product> getProductById(Long id) {
+    public Optional<Product> getProductById(Long id) throws  BadRequestException {
+
+        if(id<=0){
+            throw new  BadRequestException("No product exists for this id");
+        }
         return productRepository.findById(id);
     }
 
@@ -54,12 +59,12 @@ public class ProductService {
      * createProduct function to post new product
      */
 
-    public Product createProduct(Product product) {
+    public Product createProduct(Product product) throws BadRequestException {
         String categoryName = product.getCategory().getName();
         String productName = product.getName();
         Double price = product.getPrice();
         if (categoryName == null || productName == null || price <= 0) {
-            throw new IllegalArgumentException("Invalid parameters passed.");
+            throw new BadRequestException("Invalid parameters passed.");
         }
         List<Category> existingCategories = categoryDao.findByName(categoryName);
         if (!existingCategories.isEmpty()) {
@@ -73,7 +78,7 @@ public class ProductService {
     /**
      * deleteProduct function to delete product based on id provided
      */
-    public void deleteProduct(Long productId) throws ResourceNotFoundException {
+    public void deleteProduct(Long productId) throws ResourceNotFoundException, BadRequestException {
         boolean exists = doesProductExists(productId);
         if (!exists) {
             throw new ResourceNotFoundException("product corresponding to :" + productId + "does not exits");
@@ -85,7 +90,7 @@ public class ProductService {
      * updateProduct function to update a product based on id provided
      */
 
-    public Product updateProduct(Long id, Product updatedProduct) {
+    public Product updateProduct(Long id, Product updatedProduct) throws ResourceNotFoundException, BadRequestException {
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (optionalProduct.isPresent()) {
             Product product = optionalProduct.get();
@@ -106,13 +111,13 @@ public class ProductService {
             } else {
                 Category category = categoryDao.findById(categoryId).orElse(null);
                 if (category == null) {
-                    throw new IllegalArgumentException("Invalid category id: " + categoryId);
+                    throw new ResourceNotFoundException("Category not found corresponding to :" + categoryId);
                 }
                 product.setCategory(category);
             }
             return productRepository.save(product);
         } else {
-            throw new IllegalArgumentException("Invalid product id: " + id);
+            throw new BadRequestException("Invalid product id: " + id);
         }
     }
 
@@ -120,7 +125,11 @@ public class ProductService {
     /**
      * doesProductExists function to check whether a product exits corresponding to a given id
      */
-    public boolean doesProductExists(Long productId) {
+    public boolean doesProductExists(Long productId) throws BadRequestException {
+
+        if(productId<=0){
+            throw new BadRequestException("Invalid id provided");
+        }
         return productRepository.existsById(productId);
     }
 

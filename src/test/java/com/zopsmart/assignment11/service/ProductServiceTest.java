@@ -4,6 +4,7 @@ import com.zopsmart.assignment11.dao.CategoryDao;
 import com.zopsmart.assignment11.dao.ProductDao;
 import com.zopsmart.assignment11.entity.Category;
 import com.zopsmart.assignment11.entity.Product;
+import com.zopsmart.assignment11.exception.BadRequestException;
 import com.zopsmart.assignment11.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -25,6 +27,7 @@ public class ProductServiceTest {
 
     @Autowired
     private ProductService productService;
+
 
     @Autowired
     private ProductDao productDao;
@@ -65,7 +68,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testGetProductById() {
+    public void testGetProductById() throws BadRequestException {
         Optional<Product> optionalProduct = productService.getProductById(product.getId());
         assertTrue(optionalProduct.isPresent());
         Product foundProduct = optionalProduct.get();
@@ -75,27 +78,35 @@ public class ProductServiceTest {
     }
 
     @Test
+    void testGetProductByIdWithInvalidId() {
+        assertThrows(BadRequestException.class, () -> productService.getProductById(-1L));
+    }
+
+    @Test
+    void testGetProductByIdWithNonexistentId() {
+        Optional<Product> product = productDao.findById(123L);
+        assertFalse(product.isPresent());
+    }
+
+
+    @Test
     public void testGetProductsByCategory() throws ResourceNotFoundException {
         List<Product> products = productService.getProductsByCategory(category.getName());
         assertNotNull(products);
         assertEquals(1, products.size());
         assertEquals(product.getName(), products.get(0).getName());
-        assertEquals(product.getPrice(), products.get(0).getPrice(), 0.001);
+        assertEquals(product.getPrice(), products.get(0).getPrice());
         assertEquals(product.getCategory().getName(), products.get(0).getCategory().getName());
     }
 
     @Test
-    void getProductByCategory_shouldThrowIllegalArgumentException_whenCategoryNotFound() {
-        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
-            productService.getProductsByCategory("Non-existing category");
-        });
-
-        assertEquals("Category does not exists", exception.getMessage());
+    void testGetProductsByCategoryWithInvalidCategory() {
+        assertThrows(ResourceNotFoundException.class, () -> productService.getProductsByCategory("abc"));
     }
 
 
     @Test
-    void testCreateProduct() {
+    void testCreateProduct() throws BadRequestException {
 
         Product savedProduct = productService.createProduct(product);
 
@@ -111,13 +122,13 @@ public class ProductServiceTest {
 
         Category category = new Category("Electronics");
         Product product = new Product(null, -1000.00, category);
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(BadRequestException.class, () -> {
             productService.createProduct(product);
         });
     }
 
     @Test
-    void testCreateProductWithExistingCategory() {
+    void testCreateProductWithExistingCategory() throws BadRequestException {
         Product product = new Product("Smartphone", 15000.00, category);
 
         Product savedProduct = productService.createProduct(product);
@@ -130,7 +141,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    void testCreateProductWithNewCategory() {
+    void testCreateProductWithNewCategory() throws BadRequestException {
         Category category = new Category("Clothing");
         categoryDao.save(category);
         Product product = new Product("Shirt", 2900.99, category);
@@ -148,20 +159,25 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testDeleteProduct() throws ResourceNotFoundException {
+    public void testDeleteProduct() throws ResourceNotFoundException, BadRequestException {
         productService.deleteProduct(product.getId());
         Optional<Product> optionalProduct = productDao.findById(product.getId());
         assertFalse(optionalProduct.isPresent());
     }
 
     @Test
-    void testDeleteNonExistingProduct() {
-        Long productId = -1L;
-        assertThrows(ResourceNotFoundException.class, () -> productService.deleteProduct(productId));
+    void testDeleteInvalidId() {
+        assertThrows(BadRequestException.class, () -> productService.deleteProduct(-2L));
+    }
+    @Test
+    void deleteProduct_NonExistingProduct() {
+        assertThrows(ResourceNotFoundException.class, () -> productService.deleteProduct(123L));
     }
 
+
+
     @Test
-    public void testUpdateProduct() {
+    public void testUpdateProduct() throws BadRequestException, ResourceNotFoundException {
         Category newCategory = new Category("Mobiles");
         Product updatedProduct = new Product("Mobile", 20000.00, newCategory);
         updatedProduct.setId(product.getId());
@@ -176,15 +192,27 @@ public class ProductServiceTest {
 
     @Test
     void testUpdateProductWithNonexistentId() {
-        product = productDao.save(product);
-        assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(BadRequestException.class, () -> {
             productService.updateProduct(product.getId() + 1, new Product());
         });
     }
 
     @Test
-    public void testDoesProductExists() {
-        assertTrue(productService.doesProductExists(product.getId()));
-        assertFalse(productService.doesProductExists(-1L));
+    public void testDoesProductExist() throws BadRequestException {
+        Product product = new Product();
+        product.setName("Apple");
+        product.setPrice(100.0);
+        Category category = new Category();
+        category.setName("Fruits");
+        product.setCategory(category);
+        productService.createProduct(product);
+
+        Long productId = product.getId();
+        assertTrue(productService.doesProductExists(productId));
+    }
+    @Test
+    void testDoesProductExistsWithInvalidId() {
+        Long productId = -1L;
+        assertThrows(BadRequestException.class, () -> productService.doesProductExists(productId));
     }
 }

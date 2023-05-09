@@ -51,15 +51,19 @@ public class CategoryControllerTest {
 
     ObjectMapper objectMapper;
 
+    Category category1 ;
+    Category category2 ;
+
     @BeforeEach
     public void setUp() {
         objectMapper = new ObjectMapper();
+     category1 = new Category(1L, "Category 1");
+      category2 = new Category(2L, "Category 2");
     }
 
     @Test
     public void testGetAllCategories_Success() throws Exception {
-        Category category1 = new Category(1L, "Category 1");
-        Category category2 = new Category(2L, "Category 2");
+
         List<Category> categories = Arrays.asList(category1, category2);
 
         when(categoryService.getAllCategories()).thenReturn(categories);
@@ -82,13 +86,6 @@ public class CategoryControllerTest {
         verify(categoryService, times(1)).getAllCategories();
     }
 
-    @Test
-    public void testGetAllCategories_InternalServerError() throws Exception {
-        when(categoryService.getAllCategories()).thenThrow(new RuntimeException());
-
-        mockMvc.perform(get("/category/get"))
-                .andExpect(status().isInternalServerError());
-    }
 
     @Test
     public void testPostCategory() throws Exception {
@@ -109,21 +106,7 @@ public class CategoryControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Books"));
     }
 
-    @Test
-    public void testPostCategoryWithExistingName() throws Exception {
-        Category category = new Category();
-        category.setName("Books");
 
-        Mockito.when(categoryService.addCategory(Mockito.any(Category.class)))
-                .thenThrow(new IllegalArgumentException("Category name already exists"));
-
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/category/post")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(category)))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andExpect(MockMvcResultMatchers.header().string("Custom-Header", "Category name already exists"));
-    }
 
     @Test
     public void testGetCategoryByIdSuccess() throws Exception {
@@ -155,13 +138,6 @@ public class CategoryControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Test
-    public void testGetCategoryByIdInternalServerError() throws Exception {
-        when(categoryService.getCategoryById(1L)).thenThrow(new RuntimeException("Internal server error"));
-
-        mockMvc.perform(get("/category/get/1"))
-                .andExpect(status().isInternalServerError());
-    }
 
     @Test
     public void testUpdateCategorySuccess() throws Exception {
@@ -215,23 +191,5 @@ public class CategoryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(category)))
                 .andExpect(status().isNotFound());
-    }
-
-
-
-    @Test
-    void testUpdateCategoryWithException() throws Exception {
-        Long categoryId = 789L;
-        Category category = new Category();
-        category.setName("Test Category");
-
-        Mockito.when(categoryService.updateCategory(Mockito.eq(categoryId), Mockito.any(Category.class)))
-                .thenThrow(new RuntimeException("Internal Server Error"));
-
-        mockMvc.perform(put("/category/put/" + categoryId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(category)))
-                .andExpect(status().isInternalServerError());
-
     }
 }

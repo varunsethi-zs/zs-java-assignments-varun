@@ -2,6 +2,8 @@ package com.zopsmart.assignment11.service;
 
 import com.zopsmart.assignment11.dao.CategoryDao;
 import com.zopsmart.assignment11.entity.Category;
+import com.zopsmart.assignment11.entity.Product;
+import com.zopsmart.assignment11.exception.BadRequestException;
 import com.zopsmart.assignment11.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -47,7 +49,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    void testGetCategoryById() throws ResourceNotFoundException {
+    void testGetCategoryById() throws ResourceNotFoundException, BadRequestException {
         Long categoryId = 1L;
         Category expectedCategory = new Category("Electronics");
         expectedCategory.setId(categoryId);
@@ -71,7 +73,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    void testAddCategory() {
+    void testAddCategory() throws BadRequestException {
         Category category = new Category("Electronics");
         when(categoryRepository.findByName(category.getName())).thenReturn(new ArrayList<>());
         when(categoryRepository.save(any(Category.class))).thenReturn(category);
@@ -83,7 +85,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    void testAddCategory_ExistingCategory() {
+    void testAddCategory_ExistingCategory() throws BadRequestException {
         Category existingCategory = new Category("Electronics");
         existingCategory.setId(1L);
         when(categoryRepository.findByName(existingCategory.getName())).thenReturn(List.of(existingCategory));
@@ -93,9 +95,28 @@ class CategoryServiceTest {
         assertEquals(existingCategory.getName(), savedCategory.getName());
         verify(categoryRepository, never()).save(existingCategory);
     }
+@Test
+void testAddCategory_withNullName() {
+    Category category1 = new Category(null);
+
+    assertThrows(BadRequestException.class, () -> {
+        categoryService.addCategory(category1);
+
+});
+}
+    @Test
+    void testAddCategory_withEmptyName() {
+        Category category1 = new Category("");
+
+        assertThrows(BadRequestException.class, () -> {
+            categoryService.addCategory(category1);
+
+        });
+    }
+
 
     @Test
-    public void testUpdateCategory_Success() throws ResourceNotFoundException {
+    public void testUpdateCategory_Success() throws ResourceNotFoundException, BadRequestException {
         Category category = new Category();
         category.setId(1L);
         category.setName("Test Category");
@@ -113,7 +134,7 @@ class CategoryServiceTest {
         Category updatedCategory = new Category();
         updatedCategory.setName("Magazines");
 
-        assertThrows(ResourceNotFoundException.class, () -> {
+        assertThrows(BadRequestException.class, () -> {
             categoryService.updateCategory(-1L, updatedCategory);
         }, "Expected ResourceNotFoundException to be thrown");
     }

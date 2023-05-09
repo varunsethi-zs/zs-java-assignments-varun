@@ -1,6 +1,7 @@
 package com.zopsmart.assignment11.controller;
 
 import com.zopsmart.assignment11.entity.Category;
+import com.zopsmart.assignment11.exception.BadRequestException;
 import com.zopsmart.assignment11.exception.ResourceNotFoundException;
 import com.zopsmart.assignment11.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,7 +44,6 @@ public class CategoryController {
     })
     @GetMapping("/get")
     public ResponseEntity<List<Category>> getAllCategories() {
-        try {
             List<Category> categories = categoryService.getAllCategories();
             HttpHeaders headers = new HttpHeaders();
             if (categories == null || categories.isEmpty()) {
@@ -52,11 +52,7 @@ public class CategoryController {
             }
             headers.add("Custom_Header", "Category Found Successfully");
             return ResponseEntity.status(HttpStatus.OK).headers(headers).body(categories);
-        } catch (Exception e) {
-            LOGGER.error("Error getting all categories: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }
 
 
     /**
@@ -68,17 +64,12 @@ public class CategoryController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PostMapping("/post")
-    public ResponseEntity<Object> postCategory(@RequestBody Category category) {
+    public ResponseEntity<Object> postCategory(@RequestBody Category category) throws BadRequestException {
         HttpHeaders headers = new HttpHeaders();
-        try {
             Category addedCategory = categoryService.addCategory(category);
             headers.add("Custom-Header", "Category added successfully");
             return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(addedCategory);
-        } catch (IllegalArgumentException e) {
-            headers.add("Custom-Header", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).headers(headers).body(e.getMessage());
         }
-    }
 
     /**
      * getCategoryById function to get category based on given id
@@ -91,8 +82,7 @@ public class CategoryController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("/get/{categoryId}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable Long categoryId) {
-        try {
+    public ResponseEntity<Category> getCategoryById(@PathVariable Long categoryId) throws BadRequestException, ResourceNotFoundException {
             Category category = categoryService.getCategoryById(categoryId);
             HttpHeaders httpHeaders = new HttpHeaders();
             if (category == null) {
@@ -101,13 +91,7 @@ public class CategoryController {
             }
             httpHeaders.add("Custom-Header", "Category Found Successfully");
             return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(category);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            LOGGER.error("Error getting category by ID: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-    }
 
     /**
      * updateCategory function to update a category with given id
@@ -120,8 +104,8 @@ public class CategoryController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping("/put/{categoryId}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long categoryId, @RequestBody Category category) {
-        try {
+    public ResponseEntity<Category> updateCategory(@PathVariable Long categoryId, @RequestBody Category category) throws BadRequestException, ResourceNotFoundException {
+
             Category updatedCategory = categoryService.updateCategory(categoryId, category);
             HttpHeaders headers = new HttpHeaders();
             if (updatedCategory == null) {
@@ -130,11 +114,5 @@ public class CategoryController {
             }
             headers.add("Custom-Header", "Category Updated Successfully");
             return ResponseEntity.ok().headers(headers).body(updatedCategory);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            LOGGER.error("Error updating category: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-}

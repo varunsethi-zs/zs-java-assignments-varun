@@ -1,6 +1,8 @@
 package com.zopsmart.assignment11.controller;
 
 import com.zopsmart.assignment11.entity.Product;
+import com.zopsmart.assignment11.exception.BadRequestException;
+import com.zopsmart.assignment11.exception.ResourceNotFoundException;
 import com.zopsmart.assignment11.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -39,7 +41,6 @@ public class ProductController {
     })
     @GetMapping("/get")
     public ResponseEntity<List<Product>> getAllProducts() {
-        try {
             List<Product> products = productService.getAllProducts();
             HttpHeaders headers = new HttpHeaders();
             if (products == null) {
@@ -48,11 +49,7 @@ public class ProductController {
             }
             headers.add("Custom Header", "Product Found Successfully");
             return ResponseEntity.status(HttpStatus.OK).headers(headers).body(products);
-        } catch (Exception e) {
-            LOGGER.error("Error getting all products: {}", e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-    }
 
     /**
      * getProductById function to get product based on id
@@ -65,8 +62,7 @@ public class ProductController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("/get/{id}")
-    public ResponseEntity<Optional<Product>> getProductById(@PathVariable Long id) {
-        try {
+    public ResponseEntity<Optional<Product>> getProductById(@PathVariable Long id) throws BadRequestException {
             Optional<Product> product = productService.getProductById(id);
             HttpHeaders headers = new HttpHeaders();
             if (product.isEmpty()) {
@@ -75,11 +71,7 @@ public class ProductController {
             }
             headers.add("Custom Header", "Product Found Successfully");
             return ResponseEntity.status(HttpStatus.OK).headers(headers).body(product);
-        } catch (Exception e) {
-            LOGGER.error("Error getting product with id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-    }
 
     /**
      * getProductsByCategory function to retrieve products based on categoryName
@@ -92,8 +84,7 @@ public class ProductController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("/{categoryName}")
-    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String categoryName) {
-        try {
+    public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String categoryName) throws ResourceNotFoundException {
             List<Product> products = productService.getProductsByCategory(categoryName);
             HttpHeaders headers = new HttpHeaders();
             if (products == null) {
@@ -102,11 +93,7 @@ public class ProductController {
             }
             headers.add("Custom Header", "Product Found Successfully");
             return ResponseEntity.status(HttpStatus.OK).headers(headers).body(products);
-        } catch (Exception e) {
-            LOGGER.error("Error getting products by category {}: {}", categoryName, e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-    }
 
     /**
      * postProduct function to create new product
@@ -118,18 +105,12 @@ public class ProductController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PostMapping("/post")
-    public ResponseEntity<Object> postProduct(@RequestBody Product product) {
-        try {
+    public ResponseEntity<Object> postProduct(@RequestBody Product product) throws BadRequestException {
             Product addedProduct = productService.createProduct(product);
             HttpHeaders headers = new HttpHeaders();
             headers.add("Custom-Header", "Product added successfully");
             return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(addedProduct);
-        } catch (IllegalArgumentException e) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Custom-Header", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).headers(headers).body(e.getMessage());
         }
-    }
 
     /**
      * updateProduct function to update a product based on id
@@ -141,8 +122,7 @@ public class ProductController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        try {
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) throws BadRequestException, ResourceNotFoundException {
             Product updatedProduct = productService.updateProduct(id, product);
             HttpHeaders headers = new HttpHeaders();
             if (updatedProduct == null) {
@@ -151,11 +131,8 @@ public class ProductController {
             }
             headers.add("Custom Header", "Product Updated Successfully");
             return ResponseEntity.status(HttpStatus.OK).headers(headers).body(updatedProduct);
-        } catch (Exception e) {
-            LOGGER.error("Error updating product with id {}: {}", id, e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-    }
+
 
     /**
      * deleteProduct function to delete a product based on id provided
@@ -166,13 +143,8 @@ public class ProductController {
             @ApiResponse(responseCode = "500", description = "Internal server error"),
     })
     @DeleteMapping("/{productId}")
-    public ResponseEntity<String> deleteProduct(@PathVariable Long productId) {
-        try {
-            productService.deleteProduct(productId);
+    public ResponseEntity<String> deleteProduct(@PathVariable Long productId) throws BadRequestException, ResourceNotFoundException {
+          productService.deleteProduct(productId);
             return ResponseEntity.ok("Product with id " + productId + " deleted successfully");
-        } catch (Exception e) {
-            LOGGER.error("Error deleting product with id {}: {}", productId, e.getMessage(), e);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
-}

@@ -100,15 +100,6 @@ public class ProductControllerTest {
         assertNotNull(response.getHeaders().get("Custom-Header"));
     }
 
-    @Test
-    public void testGetAllProductsReturns500InternalServerError() {
-        when(productService.getAllProducts()).thenThrow(new RuntimeException("Something went wrong"));
-
-        ResponseEntity<List<Product>> response = productController.getAllProducts();
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertNull(response.getBody());
-    }
-
 
     @Test
     public void testGetProductById() throws Exception {
@@ -140,15 +131,7 @@ public class ProductControllerTest {
                 .andExpect(header().string("Custom-Header", "Product not found"));
     }
 
-    @Test
-    public void testGetProductByIdReturns500InternalServerError() {
-        Long productId = 1L;
-        when(productService.getProductById(productId)).thenThrow(new RuntimeException("Something went wrong"));
 
-        ResponseEntity<Optional<Product>> response = productController.getProductById(productId);
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertNull(response.getBody());
-    }
 
 
     @Test
@@ -179,17 +162,6 @@ public class ProductControllerTest {
     }
 
 
-    @Test
-    void testGetProductsByCategoryInternalServerError() throws Exception {
-        String categoryName = "fgxf";
-        mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
-        doThrow(new RuntimeException("Something went wrong"))
-                .when(productService).getProductsByCategory(categoryName);
-        mockMvc.perform(get("/products/{category}", categoryName))
-                .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$").doesNotExist());
-        verify(productService, times(1)).getProductsByCategory(categoryName);
-    }
 
     @Test
     public void testPostProduct() throws Exception {
@@ -226,26 +198,6 @@ public class ProductControllerTest {
     }
 
 
-    @Test
-    public void testPostProductWithInvalidArguments() {
-        // Arrange
-        Product product = new Product();
-        product.setName("Tv");
-        product.setPrice(-10000.0);
-        Category category = new Category();
-        category.setName("Electronics");
-        product.setCategory(category);
-
-        String errorMessage = "Invalid parameters passed.";
-        Mockito.when(productService.createProduct(Mockito.any())).thenThrow(new IllegalArgumentException(errorMessage));
-
-
-        ResponseEntity<Object> responseEntity = productController.postProduct(product);
-
-        Assert.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
-        Assert.assertEquals(errorMessage, responseEntity.getHeaders().get("Custom-Header").get(0));
-        Assert.assertEquals(errorMessage, responseEntity.getBody());
-    }
 
     @Test
     public void updateProductTest() throws Exception {
@@ -286,19 +238,6 @@ public class ProductControllerTest {
                 .andExpect(content().string("Product with id 1 deleted successfully"));
 
         verify(productService, times(1)).deleteProduct(1L);
-    }
-
-    @Test
-    void testDeleteNonExistingProduct() throws Exception {
-        Long productId = 999L;
-        mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
-
-        doThrow(new ResourceNotFoundException("Product with id " + productId + " not found"))
-                .when(productService).deleteProduct(productId);
-        mockMvc.perform(delete("/products/{id}", productId))
-                .andExpect(status().isNotFound());
-
-        verify(productService, times(1)).deleteProduct(productId);
     }
 
 
