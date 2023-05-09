@@ -123,7 +123,7 @@ public class ProductController {
                         logger.info("deleted product successfully");
                         break;
                     } catch (SQLException | ProductNotFoundException e) {
-                        logger.error("id not found :" + e);
+                        logger.error( e.getMessage());
                     }
                 case 8:
                     break;
