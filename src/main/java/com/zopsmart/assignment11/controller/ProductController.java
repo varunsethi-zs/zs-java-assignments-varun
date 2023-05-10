@@ -41,15 +41,15 @@ public class ProductController {
     })
     @GetMapping("/get")
     public ResponseEntity<List<Product>> getAllProducts() {
-            List<Product> products = productService.getAllProducts();
-            HttpHeaders headers = new HttpHeaders();
-            if (products == null) {
-                headers.add("Custom-Header", "Product Not found");
-                return ResponseEntity.notFound().headers(headers).build();
-            }
-            headers.add("Custom Header", "Product Found Successfully");
-            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(products);
+        List<Product> products = productService.getAllProducts();
+        HttpHeaders headers = new HttpHeaders();
+        if (products == null) {
+            headers.add("Custom-Header", "Product Not found");
+            return ResponseEntity.notFound().headers(headers).build();
         }
+        headers.add("Custom Header", "Product Found Successfully");
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(products);
+    }
 
     /**
      * getProductById function to get product based on id
@@ -59,19 +59,20 @@ public class ProductController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved product with supplied id"),
             @ApiResponse(responseCode = "404", description = "Product not found with given id"),
+            @ApiResponse(responseCode = "400", description = "Invalid Id provided"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("/get/{id}")
     public ResponseEntity<Optional<Product>> getProductById(@PathVariable Long id) throws BadRequestException {
-            Optional<Product> product = productService.getProductById(id);
-            HttpHeaders headers = new HttpHeaders();
-            if (product.isEmpty()) {
-                headers.add("Custom-Header", "Product not found");
-                return ResponseEntity.notFound().headers(headers).build();
-            }
-            headers.add("Custom Header", "Product Found Successfully");
-            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(product);
+        Optional<Product> product = productService.getProductById(id);
+        HttpHeaders headers = new HttpHeaders();
+        if (product.isEmpty()) {
+            headers.add("Custom-Header", "Product not found");
+            return ResponseEntity.notFound().headers(headers).build();
         }
+        headers.add("Custom Header", "Product Found Successfully");
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(product);
+    }
 
     /**
      * getProductsByCategory function to retrieve products based on categoryName
@@ -85,15 +86,15 @@ public class ProductController {
     })
     @GetMapping("/{categoryName}")
     public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String categoryName) throws ResourceNotFoundException {
-            List<Product> products = productService.getProductsByCategory(categoryName);
-            HttpHeaders headers = new HttpHeaders();
-            if (products == null) {
-                headers.add("Custom-Header", "Products not found");
-                return ResponseEntity.notFound().headers(headers).build();
-            }
-            headers.add("Custom Header", "Product Found Successfully");
-            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(products);
+        List<Product> products = productService.getProductsByCategory(categoryName);
+        HttpHeaders headers = new HttpHeaders();
+        if (products == null) {
+            headers.add("Custom-Header", "Products not found");
+            return ResponseEntity.notFound().headers(headers).build();
         }
+        headers.add("Custom Header", "Product Found Successfully");
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(products);
+    }
 
     /**
      * postProduct function to create new product
@@ -102,15 +103,15 @@ public class ProductController {
     @Operation(summary = "Add a new product", tags = "Product")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Product created successfully"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+            @ApiResponse(responseCode = "400", description = "Invalid Parameters Passed")
     })
     @PostMapping("/post")
     public ResponseEntity<Object> postProduct(@RequestBody Product product) throws BadRequestException {
-            Product addedProduct = productService.createProduct(product);
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Custom-Header", "Product added successfully");
-            return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(addedProduct);
-        }
+        Product addedProduct = productService.createProduct(product);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Custom-Header", "Product added successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(addedProduct);
+    }
 
     /**
      * updateProduct function to update a product based on id
@@ -119,19 +120,19 @@ public class ProductController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Product updated successfully with given id"),
             @ApiResponse(responseCode = "404", description = "Product not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "400", description = "Internal Id provided")
     })
     @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) throws BadRequestException, ResourceNotFoundException {
-            Product updatedProduct = productService.updateProduct(id, product);
-            HttpHeaders headers = new HttpHeaders();
-            if (updatedProduct == null) {
-                headers.add("Custom-Header", "Product not found");
-                return ResponseEntity.notFound().headers(headers).build();
-            }
-            headers.add("Custom Header", "Product Updated Successfully");
-            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(updatedProduct);
+        Product updatedProduct = productService.updateProduct(id, product);
+        HttpHeaders headers = new HttpHeaders();
+        if (updatedProduct == null) {
+            headers.add("Custom-Header", "Product not found");
+            return ResponseEntity.notFound().headers(headers).build();
         }
+        headers.add("Custom Header", "Product Updated Successfully");
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(updatedProduct);
+    }
 
 
     /**
@@ -140,11 +141,11 @@ public class ProductController {
     @Operation(summary = "Delete a product by ID", tags = "Product")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Product deleted successfully with supplied id"),
-            @ApiResponse(responseCode = "500", description = "Internal server error"),
+            @ApiResponse(responseCode = "400", description = " Invalid Parameter Passed"),
     })
     @DeleteMapping("/{productId}")
     public ResponseEntity<String> deleteProduct(@PathVariable Long productId) throws BadRequestException, ResourceNotFoundException {
-          productService.deleteProduct(productId);
-            return ResponseEntity.ok("Product with id " + productId + " deleted successfully");
-        }
+        productService.deleteProduct(productId);
+        return ResponseEntity.ok("Product with id " + productId + " deleted successfully");
     }
+}

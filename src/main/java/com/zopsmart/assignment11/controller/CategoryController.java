@@ -44,15 +44,15 @@ public class CategoryController {
     })
     @GetMapping("/get")
     public ResponseEntity<List<Category>> getAllCategories() {
-            List<Category> categories = categoryService.getAllCategories();
-            HttpHeaders headers = new HttpHeaders();
-            if (categories == null || categories.isEmpty()) {
-                headers.add("Custom-Header", "Category Not Found");
-                return ResponseEntity.noContent().headers(headers).build();
-            }
-            headers.add("Custom_Header", "Category Found Successfully");
-            return ResponseEntity.status(HttpStatus.OK).headers(headers).body(categories);
+        List<Category> categories = categoryService.getAllCategories();
+        HttpHeaders headers = new HttpHeaders();
+        if (categories == null || categories.isEmpty()) {
+            headers.add("Custom-Header", "Category Not Found");
+            return ResponseEntity.noContent().headers(headers).build();
         }
+        headers.add("Custom_Header", "Category Found Successfully");
+        return ResponseEntity.status(HttpStatus.OK).headers(headers).body(categories);
+    }
 
 
     /**
@@ -61,15 +61,15 @@ public class CategoryController {
     @Operation(summary = "Add a new category", tags = "Category")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Category created successfully"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+            @ApiResponse(responseCode = "400", description = "Invalid Parameters Passed")
     })
     @PostMapping("/post")
     public ResponseEntity<Object> postCategory(@RequestBody Category category) throws BadRequestException {
         HttpHeaders headers = new HttpHeaders();
-            Category addedCategory = categoryService.addCategory(category);
-            headers.add("Custom-Header", "Category added successfully");
-            return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(addedCategory);
-        }
+        Category addedCategory = categoryService.addCategory(category);
+        headers.add("Custom-Header", "Category added successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(addedCategory);
+    }
 
     /**
      * getCategoryById function to get category based on given id
@@ -79,19 +79,19 @@ public class CategoryController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved category with supplied id"),
             @ApiResponse(responseCode = "404", description = "Category not found"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error")
+            @ApiResponse(responseCode = "400", description = "Invalid Id passed")
     })
     @GetMapping("/get/{categoryId}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long categoryId) throws BadRequestException, ResourceNotFoundException {
-            Category category = categoryService.getCategoryById(categoryId);
-            HttpHeaders httpHeaders = new HttpHeaders();
-            if (category == null) {
-                httpHeaders.add("Custom-Header", "Category Not Found");
-                return ResponseEntity.notFound().headers(httpHeaders).build();
-            }
-            httpHeaders.add("Custom-Header", "Category Found Successfully");
-            return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(category);
+        Category category = categoryService.getCategoryById(categoryId);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        if (category == null) {
+            httpHeaders.add("Custom-Header", "Category Not Found");
+            return ResponseEntity.notFound().headers(httpHeaders).build();
         }
+        httpHeaders.add("Custom-Header", "Category Found Successfully");
+        return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(category);
+    }
 
     /**
      * updateCategory function to update a category with given id
@@ -101,18 +101,18 @@ public class CategoryController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Category updated successfully with supplied id"),
             @ApiResponse(responseCode = "404", description = "Category not found"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "400", description = "Invalid Parameters Passed")
     })
     @PutMapping("/put/{categoryId}")
     public ResponseEntity<Category> updateCategory(@PathVariable Long categoryId, @RequestBody Category category) throws BadRequestException, ResourceNotFoundException {
 
-            Category updatedCategory = categoryService.updateCategory(categoryId, category);
-            HttpHeaders headers = new HttpHeaders();
-            if (updatedCategory == null) {
-                headers.add("Custom-Header", "Category Not Found");
-                return ResponseEntity.notFound().headers(headers).build();
-            }
-            headers.add("Custom-Header", "Category Updated Successfully");
-            return ResponseEntity.ok().headers(headers).body(updatedCategory);
+        Category updatedCategory = categoryService.updateCategory(categoryId, category);
+        HttpHeaders headers = new HttpHeaders();
+        if (updatedCategory == null) {
+            headers.add("Custom-Header", "Category Not Found");
+            return ResponseEntity.notFound().headers(headers).build();
         }
+        headers.add("Custom-Header", "Category Updated Successfully");
+        return ResponseEntity.ok().headers(headers).body(updatedCategory);
     }
+}
