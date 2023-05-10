@@ -51,6 +51,7 @@ public class CategoryController {
             return ResponseEntity.noContent().headers(headers).build();
         }
         headers.add("Custom_Header", "Category Found Successfully");
+        LOGGER.info("Category Found Successfully");
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(categories);
     }
 
@@ -68,6 +69,7 @@ public class CategoryController {
         HttpHeaders headers = new HttpHeaders();
         Category addedCategory = categoryService.addCategory(category);
         headers.add("Custom-Header", "Category added successfully");
+        LOGGER.info("Category added successfully");
         return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(addedCategory);
     }
 
@@ -90,6 +92,7 @@ public class CategoryController {
             return ResponseEntity.notFound().headers(httpHeaders).build();
         }
         httpHeaders.add("Custom-Header", "Category Found Successfully");
+        LOGGER.info("Category Found Successfully");
         return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(category);
     }
 
@@ -113,6 +116,7 @@ public class CategoryController {
             return ResponseEntity.notFound().headers(headers).build();
         }
         headers.add("Custom-Header", "Category Updated Successfully");
+        LOGGER.info("Category Updated Successfully");
         return ResponseEntity.ok().headers(headers).body(updatedCategory);
     }
 }

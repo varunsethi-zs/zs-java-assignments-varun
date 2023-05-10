@@ -37,7 +37,6 @@ public class ProductController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved products"),
             @ApiResponse(responseCode = "404", description = "No products found"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("/get")
     public ResponseEntity<List<Product>> getAllProducts() {
@@ -48,6 +47,7 @@ public class ProductController {
             return ResponseEntity.notFound().headers(headers).build();
         }
         headers.add("Custom Header", "Product Found Successfully");
+        LOGGER.info("Product Found Successfully");
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(products);
     }
 
@@ -60,7 +60,6 @@ public class ProductController {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved product with supplied id"),
             @ApiResponse(responseCode = "404", description = "Product not found with given id"),
             @ApiResponse(responseCode = "400", description = "Invalid Id provided"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("/get/{id}")
     public ResponseEntity<Optional<Product>> getProductById(@PathVariable Long id) throws BadRequestException {
@@ -71,6 +70,7 @@ public class ProductController {
             return ResponseEntity.notFound().headers(headers).build();
         }
         headers.add("Custom Header", "Product Found Successfully");
+        LOGGER.info("Product Found Successfully");
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(product);
     }
 
@@ -82,7 +82,6 @@ public class ProductController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved products with given category name"),
             @ApiResponse(responseCode = "404", description = "No products found for the category"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("/{categoryName}")
     public ResponseEntity<List<Product>> getProductsByCategory(@PathVariable String categoryName) throws ResourceNotFoundException {
@@ -93,6 +92,7 @@ public class ProductController {
             return ResponseEntity.notFound().headers(headers).build();
         }
         headers.add("Custom Header", "Product Found Successfully");
+        LOGGER.info("Product Found Successfully");
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(products);
     }
 
@@ -110,6 +110,7 @@ public class ProductController {
         Product addedProduct = productService.createProduct(product);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Custom-Header", "Product added successfully");
+        LOGGER.info("Product added successfully");
         return ResponseEntity.status(HttpStatus.CREATED).headers(headers).body(addedProduct);
     }
 
@@ -131,6 +132,7 @@ public class ProductController {
             return ResponseEntity.notFound().headers(headers).build();
         }
         headers.add("Custom Header", "Product Updated Successfully");
+        LOGGER.info("Product Updated Successfully");
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(updatedProduct);
     }
 
@@ -146,6 +148,7 @@ public class ProductController {
     @DeleteMapping("/{productId}")
     public ResponseEntity<String> deleteProduct(@PathVariable Long productId) throws BadRequestException, ResourceNotFoundException {
         productService.deleteProduct(productId);
+        LOGGER.info("Product with id " + productId + " deleted successfully");
         return ResponseEntity.ok("Product with id " + productId + " deleted successfully");
     }
 }
